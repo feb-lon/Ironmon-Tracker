@@ -376,19 +376,23 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 		end
 	end
 	local movesRating = 0
-	local penaltyRepeatedMove = RS.OtherAdjustments.PenaltyRepeatedMove or 1
-	for i, iMove in pairs(iMoves) do
-		-- Check for duplicate offensive move types; redundant typing coverage applies penalty to the move with the lower rating
-		for _, cMove in pairs(iMoves) do
-			-- If this iMoves rating is lower than compared-move, and compared-move matches type, and they both deal damage, adjust the iMove rating
-			if cMove and iMove.rating < cMove.rating and cMove.move.type == iMove.move.type and cMove.id ~= iMove.id and cMove.ePower > 0 and iMove.ePower > 0 then
-				iMove.rating = iMove.rating * penaltyRepeatedMove
-				break
+	if true then
+		local penaltyRepeatedMove = RS.OtherAdjustments.PenaltyRepeatedMove or 1
+		for i, iMove in pairs(iMoves) do
+			-- Check for duplicate offensive move types; redundant typing coverage applies penalty to the move with the lower rating
+			for _, cMove in pairs(iMoves) do
+				-- If this iMoves rating is lower than compared-move, and compared-move matches type, and they both deal damage, adjust the iMove rating
+				if cMove and iMove.rating < cMove.rating and cMove.move.type == iMove.move.type and cMove.id ~= iMove.id and cMove.ePower > 0 and iMove.ePower > 0 then
+					iMove.rating = iMove.rating * penaltyRepeatedMove
+					break
+				end
 			end
+			movesRating = movesRating + iMove.rating
 		end
-		movesRating = movesRating + iMove.rating
+		movesRating = math.min(movesRating, RS.CategoryMaximums.Moves or 999)
+	else
+
 	end
-	movesRating = math.min(movesRating, RS.CategoryMaximums.Moves or 999)
 	ratingTotal = ratingTotal + movesRating
 
 	-- STATS (OFFENSIVE)

@@ -1,5 +1,28 @@
 MoveData = {}
 
+MoveData.Status = {
+	MoveData.Status.Burn,
+	MoveData.Status.Freeze,
+	MoveData.Status.Paralyzis,
+	MoveData.Status.Sleep,
+	MoveData.Status.Poison,
+	MoveData.Status.Toxic,
+	MoveData.Status.Infatuation,
+	MoveData.Status.Confusion,
+	MoveData.Status.Flinch,
+}
+
+MoveData.Stats = {
+	MoveData.Stats.ATK,
+	MoveData.Stats.DEF,
+	MoveData.Stats.SPA,
+	MoveData.Stats.SPD,
+	MoveData.Stats.SPE,
+	MoveData.Stats.ACC,
+	MoveData.Stats.EVA,
+	MoveData.Stats.CRT,
+}
+
 MoveData.Values = {
 	GuillotineId = 12,
 	HornDrillId = 32,
@@ -255,6 +278,321 @@ MoveData.IsRecoilMove = {
 	[ "38"] = true, -- Double-Edge
 	[ "66"] = true, -- Submission
 	["344"] = true, -- Volt Tackle
+}
+
+MoveData.InflictsStatus = {
+	["7"] = { [MoveData.Status.Burn] = 0.1, }, -- Fire Punch
+	["8"] = { [MoveData.Status.Freeze] = 0.1, }, -- Ice Punch
+	["9"] = { [MoveData.Status.Paralyzis] = 0.1, }, -- Thunder Punch
+	["23"] = { [MoveData.Status.Flinch] = 0.3, }, -- Stomp
+	["27"] = { [MoveData.Status.Flinch] = 0.3, }, -- Rolling Kick
+	["29"] = { [MoveData.Status.Flinch] = 0.3, }, -- Headbutt
+	["34"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Body Slam
+	["40"] = { [MoveData.Status.Poison] = 0.3, }, -- Poison Sting
+	["41"] = { [MoveData.Status.Poison] = 0.2, }, -- Twineedle
+	["44"] = { [MoveData.Status.Flinch] = 0.2, }, -- Bite
+	["47"] = { [MoveData.Status.Sleep] = 1, }, -- Sing
+	["48"] = { [MoveData.Status.Confusion] = 1, }, -- Supersonic
+	["52"] = { [MoveData.Status.Burn] = 0.1, }, -- Ember
+	["53"] = { [MoveData.Status.Burn] = 0.1, }, -- Flamethrower
+	["58"] = { [MoveData.Status.Freeze] = 0.1, }, -- Ice Beam
+	["59"] = { [MoveData.Status.Freeze] = 0.1, }, -- Blizzard
+	["60"] = { [MoveData.Status.Confusion] = 0.1, }, -- Psybeam
+	["77"] = { [MoveData.Status.Poison] = 1, }, -- Poison Powder
+	["78"] = { [MoveData.Status.Paralyzis] = 1, }, -- Stun Spore
+	["79"] = { [MoveData.Status.Sleep] = 1, }, -- Sleep Powder
+	["84"] = { [MoveData.Status.Paralyzis] = 0.1, }, -- Thunder Shock
+	["85"] = { [MoveData.Status.Paralyzis] = 0.1, }, -- Thunderbolt
+	["86"] = { [MoveData.Status.Paralyzis] = 1, }, -- Thunderwave
+	["87"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Thunder
+	["92"] = { [MoveData.Status.Toxic] = 1, }, -- Toxic
+	["93"] = { [MoveData.Status.Confusion] = 0.1, }, -- Confusion
+	["95"] = { [MoveData.Status.Sleep] = 1, }, -- Hypnosis
+	["109"] = { [MoveData.Status.Confusion] = 1, }, -- Confuse Ray
+	["122"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Lick
+	["123"] = { [MoveData.Status.Poison] = 0.4, }, -- Poison Powder
+	["123"] = { [MoveData.Status.Poison] = 0.3, }, -- Sludge
+	["125"] = { [MoveData.Status.Flinch] = 0.1, }, -- Bone Club
+	["126"] = { [MoveData.Status.Burn] = 0.1, }, -- Fire Blast
+	["137"] = { [MoveData.Status.Paralyzis] = 1, }, -- Glare
+	["139"] = { [MoveData.Status.Poison] = 1, }, -- Poison Gas
+	["142"] = { [MoveData.Status.Sleep] = 1, }, -- Lovely Kiss
+	["143"] = { [MoveData.Status.Flinch] = 0.3, }, -- Sky Attack
+	["146"] = { [MoveData.Status.Confusion] = 0.2, }, -- Dizzy Punch
+	["147"] = { [MoveData.Status.Sleep] = 1, }, -- Spore
+	["157"] = { [MoveData.Status.Flinch] = 0.3, }, -- Rock Slide
+	["158"] = { [MoveData.Status.Flinch] = 0.1, }, -- Hyper Fang
+	["160"] = { [MoveData.Status.Paralyzis] = 1/15, [MoveData.Status.Burn] = 1/15, [MoveData.Status.Freeze] = 1/15, }, -- Tri Attack
+	["172"] = { [MoveData.Status.Burn] = 0.1, }, -- FFlame Wheel
+	["173"] = { [MoveData.Status.Flinch] = 0.3, }, -- Snore
+	["181"] = { [MoveData.Status.Freeze] = 0.1, }, -- Powder Snow
+	["186"] = { [MoveData.Status.Confusion] = 1, }, -- Sweet Kiss
+	["188"] = { [MoveData.Status.Poison] = 0.3, }, -- Sludge Bomb
+	["191"] = { [MoveData.Status.Paralyzis] = 1, }, -- Zap Cannon
+	["207"] = { [MoveData.Status.Confusion] = 1, }, -- Swagger
+	["209"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Spark
+	["221"] = { [MoveData.Status.Burn] = 0.5, }, -- Sacred Fire
+	["223"] = { [MoveData.Status.Confusion] = 1, }, -- Dynamic Punch
+	["225"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Dragon Breath
+	["239"] = { [MoveData.Status.Flinch] = 0.2, }, -- Twister
+	["257"] = { [MoveData.Status.Burn] = 0.1, }, -- Heat Wave
+	["260"] = { [MoveData.Status.Confusion] = 1, }, -- Flatter
+	["261"] = { [MoveData.Status.Burn] = 1, }, -- Will-O-Wisp
+	["281"] = { [MoveData.Status.Sleep] = 1, }, -- Yawn
+	["298"] = { [MoveData.Status.Confusion] = 1, }, -- Teeter Dance
+	["299"] = { [MoveData.Status.Burn] = 0.1, }, -- Blaze Kick
+	["302"] = { [MoveData.Status.Flinch] = 0.3, }, -- Needle Arm
+	["305"] = { [MoveData.Status.Toxic] = 0.3, }, -- Poison Fang
+	["310"] = { [MoveData.Status.Flinch] = 0.3, }, -- Astonish
+	["320"] = { [MoveData.Status.Sleep] = 1, }, -- Grass Whistle
+	["324"] = { [MoveData.Status.Confusion] = 0.1, }, -- Signal Beam
+	["326"] = { [MoveData.Status.Flinch] = 0.1, }, -- Extrasensory
+	["340"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Bounce
+	["342"] = { [MoveData.Status.Poison] = 0.1, }, -- Poison Tail
+	["352"] = { [MoveData.Status.Confusion] = 0.2, }, -- Signal Beam
+}
+
+MoveData.ModifiesEnemyStat = {
+	["28"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Sand Attack
+	["39"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Tail Whip
+	["43"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Leer
+	["45"] = {[MoveData.Stats.ATK] = true, modifier = -1, chance = 1}, -- Growl
+	["51"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.1}, -- Acid
+	["61"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 0.1}, -- Bubble Beam
+	["62"] = {[MoveData.Stats.ATK] = true, modifier = -1, chance = 0.1}, -- Aurora Beam
+	["81"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- String Shot
+	["94"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.1}, -- Psychic
+	["103"] = {[MoveData.Stats.DEF] = true, modifier = -2, chance = 1}, -- Screech
+	["108"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Smokescreen
+	["132"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 0.1}, -- Constrict
+	["134"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Kinesis
+	["145"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 0.1}, -- Bubble
+	["148"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Flash
+	["178"] = {[MoveData.Stats.SPE] = true, modifier = -2, chance = 1}, -- Cotton Spore
+	["183"] = {[MoveData.Stats.SPE] = true, modifier = -2, chance = 1}, -- Scary Face
+	["189"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Mud Slap
+	["190"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 0.5}, -- Octazooka
+	["196"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- Icy Wind
+	["204"] = {[MoveData.Stats.ATK] = true, modifier = -2, chance = 1}, -- Charm
+	["207"] = {[MoveData.Stats.ATK] = true, modifier = 2, chance = 1}, -- Swagger
+	["230"] = {[MoveData.Stats.EVA] = true, modifier = -1, chance = 1}, -- Sweet Scent
+	["231"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.3}, -- Iron Tail
+	["242"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.2}, -- Crunch
+	["247"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.2}, -- Shadow Ball
+	["249"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.5}, -- Rock Smash
+	["260"] = {[MoveData.Stats.SPA] = true, modifier = 1, chance = 1}, -- Flatter
+	["295"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.5}, -- Luster Purge
+	["296"] = {[MoveData.Stats.SPA] = true, modifier = -1, chance = 0.5}, -- Mist Ball
+	["297"] = {[MoveData.Stats.ATK] = true, modifier = -2, chance = 1}, -- Feather Dance
+	["305"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.5}, -- Crush Claw
+	["313"] = {[MoveData.Stats.SPA] = true, modifier = -2, chance = 1}, -- Fake Tears
+	["317"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- Rock Tomb
+	["319"] = {[MoveData.Stats.SPD] = true, modifier = -2, chance = 1}, -- Metal Sound
+	["321"] = {[MoveData.Stats.ATK] = true, [MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Tickle
+	["330"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 0.3}, -- Muddy Water
+	["341"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- Mud Shot
+}
+
+MoveData.ModifiesOwnStat = {
+	["14"] = { [MoveData.Stats.ATK] = true, modifier = 2, chance = 1}, -- Swords Dance
+	["74"] = { [MoveData.Stats.SPA] = true, modifier = 1, chance = 1}, -- Growth
+	["96"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 1}, -- Meditate
+	["97"] = { [MoveData.Stats.SPE] = true, modifier = 2, chance = 1}, -- Agility
+	["99"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 0.5}, -- Rage TODO impove method
+	["104"] = { [MoveData.Stats.EVA] = true, modifier = 1, chance = 1}, -- Double Team
+	["106"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Harden
+	["107"] = { [MoveData.Stats.EVA] = true, modifier = 1, chance = 1}, -- Minimize
+	["110"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Withdraw
+	["111"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Defense Curl
+	["112"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Barrier
+	["113"] = { [MoveData.Stats.SPD] = true, modifier = 2, chance = 1}, -- Light Screen TODO
+	["115"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Reflect TODO
+	["116"] = { [MoveData.Stats.CRT] = true, modifier = 2, chance = 1}, -- Focus Energy
+	["130"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Skull Bash
+	["133"] = { [MoveData.Stats.SPD] = true, modifier = 2, chance = 1}, -- Amnesia
+	["151"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Acid Armor
+	["159"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 1}, -- Sharpen TODO curse move 174
+	["211"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 0.1}, -- Steel Wing
+	["232"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 0.1}, -- Metal Claw
+	["246"] = { [MoveData.Stats.ATK] = true,[MoveData.Stats.SPE] = true,[MoveData.Stats.DEF] = true,[MoveData.Stats.SPA] = true,[MoveData.Stats.SPD] = true, modifier = 1, chance = 0.1}, -- Ancient Power
+	["276"] = { [MoveData.Stats.ATK] = true, [MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Superpower
+	["294"] = { [MoveData.Stats.SPA] = true, modifier = 2, chance = 1}, -- Tail Glow
+	["309"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 0.2}, -- Meteor Mash
+	["315"] = { [MoveData.Stats.SPA] = true, modifier = -2, chance = 1}, -- Overheat
+	["318"] = { [MoveData.Stats.ATK] = true,[MoveData.Stats.SPE] = true,[MoveData.Stats.DEF] = true,[MoveData.Stats.SPA] = true,[MoveData.Stats.SPD] = true, modifier = 1, chance = 0.1}, -- Silver Wind
+	["322"] = { [MoveData.Stats.SPD] = true, [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Cosmic Power
+	["334"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Iron Defense
+	["336"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 1}, -- Howl
+	["339"] = { [MoveData.Stats.ATK] = true, [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Bulk Up
+	["347"] = { [MoveData.Stats.SPA] = true, [MoveData.Stats.SPD] = true, modifier = 1, chance = 1}, -- Calm Mind
+	["349"] = { [MoveData.Stats.ATK] = true, [MoveData.Stats.SPE] = true, modifier = 1, chance = 1}, -- Dragon Dance
+	["354"] = { [MoveData.Stats.SPA] = true, modifier = -2, chance = 1}, -- Psycho Boost
+}
+
+MoveData.IsSelfHitOnMiss = {
+	[ "26"] = true, -- Jump Kick
+	[ "136"] = true, -- High Jump Kick
+}
+
+MoveData.IsHighCritMove = {
+	[ "2"] = true, -- Karate Chop
+	[ "75"] = true, -- Razor Leaf
+	[ "143"] = true, -- Sky Attack
+	[ "152"] = true, -- Crab Hammer
+	[ "162"] = true, -- Slash
+	[ "177"] = true, -- Aeroblast
+	[ "238"] = true, -- Cross Chop
+	[ "299"] = true, -- Blaze Kick
+	[ "314"] = true, -- Air Cutter
+	[ "342"] = true, -- Poison Tail
+	[ "348"] = true, -- Leaf Blade
+}
+
+MoveData.IsHitAfter3TurnsMove = {
+	[ "248"] = true, -- Future Sight
+	[ "281"] = true, -- Yawn
+	[ "353"] = true, -- Doom Desire
+}
+
+MoveData.IsFirstTurnOnlyMove = {
+	[ "252"] = true, -- Fake Out
+}
+
+MoveData.RemovesBindingsAndLeechSeed = {
+	[ "229"] = true, -- Rapid Spin
+}
+
+MoveData.SkipsTurnAfterwards = {
+	[ "63"] = true, -- Hyper Beam
+	[ "307"] = true, -- Blast Burn
+	[ "308"] = true, -- Hydro Cannon
+	[ "338"] = true, -- Frenzy Plant
+}
+
+MoveData.IsItemStealMove = {
+	[ "168"] = true, -- Thief
+	[ "343"] = true, -- Covet
+}
+
+MoveData.IsRemoveItemMove = {
+	[ "282"] = true, -- Knock Off
+}
+
+MoveData.IsThawMove = {
+	[ "172"] = true, -- Flame Wheel
+	[ "221"] = true, -- Sacred Fire
+}
+
+MoveData.RequiresSleeping = {
+	[ "173"] = true, -- Snore
+}
+
+-- 1 = generic, 2 = flying, 3 = under ground, 4 = under water, 5 = skipped by sun
+MoveData.ChargeUpTurn = {
+	[ "13"] = 1, -- Razor Wind
+	[ "19"] = 2, -- Fly
+	[ "76"] = 5, -- Solar Beam
+	[ "91"] = 3, -- Dig
+	[ "130"] = 1, -- Skull Bash
+	[ "143"] = 1, -- Sky Attack
+	[ "291"] = 4, -- Dive
+	[ "340"] = 2, -- Bounce
+}
+
+-- 1 = flying, 2 = under ground, 3 = under water, 4 = minimized mons, 5 = paralyzed mons,
+-- 6 = on switch, 7 = user para/burn/poisoned -> double power, 8 = enemy para'd -> double power + cure
+-- 9 = normal dmg vs flying
+MoveData.DoubleDamageVersus = {
+	[ "16"] = 1, -- Gust
+	[ "57"] = 3, -- Surf
+	[ "87"] = 9, -- Thunder
+	[ "89"] = 2, -- Earthquake
+	[ "228"] = 6, -- Pursuit
+	[ "239"] = 2, -- Twister
+	[ "250"] = 3, -- Whirlpool
+	[ "263"] = 7, -- Facade
+	[ "265"] = 8, -- Smelling Salt
+	[ "302"] = 4, -- Needle Arm
+	[ "310"] = 4, -- Astonish
+	[ "326"] = 4, -- Extrasensory
+	[ "327"] = 9, -- Sky Uppercut
+}
+
+-- 1 = Clear, 2 = Hail, 3 = Rain, 4 = Sunny, 5 = Sandstorm
+MoveData.DmgModifiedByWeather = {
+	[ "76"] = {[1]=0.5,[2]=0.5,[3]=0.5,[5]=0.5}, -- Solar Beam
+}
+
+-- 1 = Clear, 2 = Hail, 3 = Rain, 4 = Sunny, 5 = Sandstorm
+MoveData.AccuracySetByWeather = {
+	[ "87"] = {[3]=1, [4]=0.5}, -- Thunder
+}
+
+-- 1 = doubles dmg each turn, 2 = stops after 2-3 turns and confuses, 3 = no sleep while attacking
+MoveData.LockInMoves = {
+	[ "37"] = true, --Thrash
+	[ "80"] = true, --Petal Dance
+	[ "200"] = true, --Outrage
+	[ "205"] = true, --Rollout
+	[ "253"] = true, --Uproar
+}
+
+MoveData.ConfusesSelf = {
+	[ "37"] = true, --Thrash
+	[ "80"] = true, --Petal Dance
+	[ "200"] = true, --Outrage
+}
+
+MoveData.DoublesDmgIfUsedConsecutively = {
+	[ "205"] = true, --Rollout
+	[ "210"] = true, --Fury Cutter
+	[ "301"] = true, --Ice Ball
+}
+
+MoveData.IsBindMove = {
+	[ "20"] = true, -- Bind
+	[ "35"] = true, -- Wrap
+	[ "83"] = true, -- Fire Spin
+	[ "128"] = true, -- Clamp
+	[ "250"] = true, -- Whirlpool
+	[ "328"] = true, -- Sand Tomb
+}
+
+MoveData.IsDrainMove = {
+	[ "71"] = true, -- Absorb
+	[ "72"] = true, -- Mega Drain
+	[ "138"] = true, -- Dream Eater
+	[ "141"] = true, -- Leech Life
+	[ "202"] = true, -- Giga Drain
+}
+
+MoveData.IsHighPriorityMove = {
+	[ "98"] = true, -- Quick Attack
+	[ "182"] = true, -- Mach Punch
+	[ "245"] = true, -- Extreme Speed
+}
+
+MoveData.FailsIfDamaged = {
+	[ "264"] = true, -- Focus Punch
+}
+
+MoveData.RemovesBarrierLightScreen = {
+	[ "280"] = true, -- Brick Break
+}
+
+MoveData.IsLowPriorityMove = {
+	[ "264"] = true, -- Focus Punch
+	[ "279"] = true, -- Revenge
+}
+
+-- 1 = Enemy is asleep
+MoveData.HasPrecondition = {
+	[ "138"] = 1, -- Dream Eater
+}
+
+-- 1 = sets up rollout / ice ball
+MoveData.SetsUpMove = {
+	[ "111"] = 1, --Defense Curl
 }
 
 function MoveData.initialize()
