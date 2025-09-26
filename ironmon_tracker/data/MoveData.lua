@@ -1,26 +1,26 @@
 MoveData = {}
 
 MoveData.Status = {
-	MoveData.Status.Burn,
-	MoveData.Status.Freeze,
-	MoveData.Status.Paralyzis,
-	MoveData.Status.Sleep,
-	MoveData.Status.Poison,
-	MoveData.Status.Toxic,
-	MoveData.Status.Infatuation,
-	MoveData.Status.Confusion,
-	MoveData.Status.Flinch,
+	BURN = "burn",
+	FREEZE = "freeze",
+	PARALYSIS = "paralysis",
+	SLEEP = "sleep",
+	POISON = "poison",
+	TOXIC = "toxic",
+	INFATUATION = "infatuation",
+	CONFUSION = "confusion",
+	FLINCH = "flinch",
 }
 
 MoveData.Stats = {
-	MoveData.Stats.ATK,
-	MoveData.Stats.DEF,
-	MoveData.Stats.SPA,
-	MoveData.Stats.SPD,
-	MoveData.Stats.SPE,
-	MoveData.Stats.ACC,
-	MoveData.Stats.EVA,
-	MoveData.Stats.CRT,
+	ATK = "Attack",
+	DEF = "Defense",
+	SPA = "Special Attack",
+	SPD = "Special Defense",
+	SPE = "Speed",
+	ACC = "Accuracy",
+	EVA = "Evasion",
+	CRT = "Critical Hit Chance",
 }
 
 MoveData.Values = {
@@ -280,76 +280,76 @@ MoveData.IsRecoilMove = {
 	["344"] = true, -- Volt Tackle
 }
 
-MoveData.InflictsStatus = {
-	["7"] = { [MoveData.Status.Burn] = 0.1, }, -- Fire Punch
-	["8"] = { [MoveData.Status.Freeze] = 0.1, }, -- Ice Punch
-	["9"] = { [MoveData.Status.Paralyzis] = 0.1, }, -- Thunder Punch
-	["23"] = { [MoveData.Status.Flinch] = 0.3, }, -- Stomp
-	["27"] = { [MoveData.Status.Flinch] = 0.3, }, -- Rolling Kick
-	["29"] = { [MoveData.Status.Flinch] = 0.3, }, -- Headbutt
-	["34"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Body Slam
-	["40"] = { [MoveData.Status.Poison] = 0.3, }, -- Poison Sting
-	["41"] = { [MoveData.Status.Poison] = 0.2, }, -- Twineedle
-	["44"] = { [MoveData.Status.Flinch] = 0.2, }, -- Bite
-	["47"] = { [MoveData.Status.Sleep] = 1, }, -- Sing
-	["48"] = { [MoveData.Status.Confusion] = 1, }, -- Supersonic
-	["52"] = { [MoveData.Status.Burn] = 0.1, }, -- Ember
-	["53"] = { [MoveData.Status.Burn] = 0.1, }, -- Flamethrower
-	["58"] = { [MoveData.Status.Freeze] = 0.1, }, -- Ice Beam
-	["59"] = { [MoveData.Status.Freeze] = 0.1, }, -- Blizzard
-	["60"] = { [MoveData.Status.Confusion] = 0.1, }, -- Psybeam
-	["77"] = { [MoveData.Status.Poison] = 1, }, -- Poison Powder
-	["78"] = { [MoveData.Status.Paralyzis] = 1, }, -- Stun Spore
-	["79"] = { [MoveData.Status.Sleep] = 1, }, -- Sleep Powder
-	["84"] = { [MoveData.Status.Paralyzis] = 0.1, }, -- Thunder Shock
-	["85"] = { [MoveData.Status.Paralyzis] = 0.1, }, -- Thunderbolt
-	["86"] = { [MoveData.Status.Paralyzis] = 1, }, -- Thunderwave
-	["87"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Thunder
-	["92"] = { [MoveData.Status.Toxic] = 1, }, -- Toxic
-	["93"] = { [MoveData.Status.Confusion] = 0.1, }, -- Confusion
-	["95"] = { [MoveData.Status.Sleep] = 1, }, -- Hypnosis
-	["109"] = { [MoveData.Status.Confusion] = 1, }, -- Confuse Ray
-	["122"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Lick
-	["123"] = { [MoveData.Status.Poison] = 0.4, }, -- Poison Powder
-	["123"] = { [MoveData.Status.Poison] = 0.3, }, -- Sludge
-	["125"] = { [MoveData.Status.Flinch] = 0.1, }, -- Bone Club
-	["126"] = { [MoveData.Status.Burn] = 0.1, }, -- Fire Blast
-	["137"] = { [MoveData.Status.Paralyzis] = 1, }, -- Glare
-	["139"] = { [MoveData.Status.Poison] = 1, }, -- Poison Gas
-	["142"] = { [MoveData.Status.Sleep] = 1, }, -- Lovely Kiss
-	["143"] = { [MoveData.Status.Flinch] = 0.3, }, -- Sky Attack
-	["146"] = { [MoveData.Status.Confusion] = 0.2, }, -- Dizzy Punch
-	["147"] = { [MoveData.Status.Sleep] = 1, }, -- Spore
-	["157"] = { [MoveData.Status.Flinch] = 0.3, }, -- Rock Slide
-	["158"] = { [MoveData.Status.Flinch] = 0.1, }, -- Hyper Fang
-	["160"] = { [MoveData.Status.Paralyzis] = 1/15, [MoveData.Status.Burn] = 1/15, [MoveData.Status.Freeze] = 1/15, }, -- Tri Attack
-	["172"] = { [MoveData.Status.Burn] = 0.1, }, -- FFlame Wheel
-	["173"] = { [MoveData.Status.Flinch] = 0.3, }, -- Snore
-	["181"] = { [MoveData.Status.Freeze] = 0.1, }, -- Powder Snow
-	["186"] = { [MoveData.Status.Confusion] = 1, }, -- Sweet Kiss
-	["188"] = { [MoveData.Status.Poison] = 0.3, }, -- Sludge Bomb
-	["191"] = { [MoveData.Status.Paralyzis] = 1, }, -- Zap Cannon
-	["207"] = { [MoveData.Status.Confusion] = 1, }, -- Swagger
-	["209"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Spark
-	["221"] = { [MoveData.Status.Burn] = 0.5, }, -- Sacred Fire
-	["223"] = { [MoveData.Status.Confusion] = 1, }, -- Dynamic Punch
-	["225"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Dragon Breath
-	["239"] = { [MoveData.Status.Flinch] = 0.2, }, -- Twister
-	["257"] = { [MoveData.Status.Burn] = 0.1, }, -- Heat Wave
-	["260"] = { [MoveData.Status.Confusion] = 1, }, -- Flatter
-	["261"] = { [MoveData.Status.Burn] = 1, }, -- Will-O-Wisp
-	["281"] = { [MoveData.Status.Sleep] = 1, }, -- Yawn
-	["298"] = { [MoveData.Status.Confusion] = 1, }, -- Teeter Dance
-	["299"] = { [MoveData.Status.Burn] = 0.1, }, -- Blaze Kick
-	["302"] = { [MoveData.Status.Flinch] = 0.3, }, -- Needle Arm
-	["305"] = { [MoveData.Status.Toxic] = 0.3, }, -- Poison Fang
-	["310"] = { [MoveData.Status.Flinch] = 0.3, }, -- Astonish
-	["320"] = { [MoveData.Status.Sleep] = 1, }, -- Grass Whistle
-	["324"] = { [MoveData.Status.Confusion] = 0.1, }, -- Signal Beam
-	["326"] = { [MoveData.Status.Flinch] = 0.1, }, -- Extrasensory
-	["340"] = { [MoveData.Status.Paralyzis] = 0.3, }, -- Bounce
-	["342"] = { [MoveData.Status.Poison] = 0.1, }, -- Poison Tail
-	["352"] = { [MoveData.Status.Confusion] = 0.2, }, -- Signal Beam
+MoveData.StatusInflicted = {
+	["7"] = { [MoveData.Status.BURN] = 0.1, }, -- Fire Punch
+	["8"] = { [MoveData.Status.FREEZE] = 0.1, }, -- Ice Punch
+	["9"] = { [MoveData.Status.PARALYSIS] = 0.1, }, -- Thunder Punch
+	["23"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Stomp
+	["27"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Rolling Kick
+	["29"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Headbutt
+	["34"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Body Slam
+	["40"] = { [MoveData.Status.POISON] = 0.3, }, -- Poison Sting
+	["41"] = { [MoveData.Status.POISON] = 0.2, }, -- Twineedle
+	["44"] = { [MoveData.Status.FLINCH] = 0.2, }, -- Bite
+	["47"] = { [MoveData.Status.SLEEP] = 1, }, -- Sing
+	["48"] = { [MoveData.Status.CONFUSION] = 1, }, -- Supersonic
+	["52"] = { [MoveData.Status.BURN] = 0.1, }, -- Ember
+	["53"] = { [MoveData.Status.BURN] = 0.1, }, -- Flamethrower
+	["58"] = { [MoveData.Status.FREEZE] = 0.1, }, -- Ice Beam
+	["59"] = { [MoveData.Status.FREEZE] = 0.1, }, -- Blizzard
+	["60"] = { [MoveData.Status.CONFUSION] = 0.1, }, -- Psybeam
+	["77"] = { [MoveData.Status.POISON] = 1, }, -- Poison Powder
+	["78"] = { [MoveData.Status.PARALYSIS] = 1, }, -- Stun Spore
+	["79"] = { [MoveData.Status.SLEEP] = 1, }, -- Sleep Powder
+	["84"] = { [MoveData.Status.PARALYSIS] = 0.1, }, -- Thunder Shock
+	["85"] = { [MoveData.Status.PARALYSIS] = 0.1, }, -- Thunderbolt
+	["86"] = { [MoveData.Status.PARALYSIS] = 1, }, -- Thunderwave
+	["87"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Thunder
+	["92"] = { [MoveData.Status.TOXIC] = 1, }, -- Toxic
+	["93"] = { [MoveData.Status.CONFUSION] = 0.1, }, -- Confusion
+	["95"] = { [MoveData.Status.SLEEP] = 1, }, -- Hypnosis
+	["109"] = { [MoveData.Status.CONFUSION] = 1, }, -- Confuse Ray
+	["122"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Lick
+	["123"] = { [MoveData.Status.POISON] = 0.4, }, -- Poison Powder
+	["123"] = { [MoveData.Status.POISON] = 0.3, }, -- Sludge
+	["125"] = { [MoveData.Status.FLINCH] = 0.1, }, -- Bone Club
+	["126"] = { [MoveData.Status.BURN] = 0.1, }, -- Fire Blast
+	["137"] = { [MoveData.Status.PARALYSIS] = 1, }, -- Glare
+	["139"] = { [MoveData.Status.POISON] = 1, }, -- Poison Gas
+	["142"] = { [MoveData.Status.SLEEP] = 1, }, -- Lovely Kiss
+	["143"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Sky Attack
+	["146"] = { [MoveData.Status.CONFUSION] = 0.2, }, -- Dizzy Punch
+	["147"] = { [MoveData.Status.SLEEP] = 1, }, -- Spore
+	["157"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Rock Slide
+	["158"] = { [MoveData.Status.FLINCH] = 0.1, }, -- Hyper Fang
+	["160"] = { [MoveData.Status.PARALYSIS] = 1/15, [MoveData.Status.BURN] = 1/15, [MoveData.Status.FREEZE] = 1/15, }, -- Tri Attack
+	["172"] = { [MoveData.Status.BURN] = 0.1, }, -- FFlame Wheel
+	["173"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Snore
+	["181"] = { [MoveData.Status.FREEZE] = 0.1, }, -- Powder Snow
+	["186"] = { [MoveData.Status.CONFUSION] = 1, }, -- Sweet Kiss
+	["188"] = { [MoveData.Status.POISON] = 0.3, }, -- Sludge Bomb
+	["191"] = { [MoveData.Status.PARALYSIS] = 1, }, -- Zap Cannon
+	["207"] = { [MoveData.Status.CONFUSION] = 1, }, -- Swagger
+	["209"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Spark
+	["221"] = { [MoveData.Status.BURN] = 0.5, }, -- Sacred Fire
+	["223"] = { [MoveData.Status.CONFUSION] = 1, }, -- Dynamic Punch
+	["225"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Dragon Breath
+	["239"] = { [MoveData.Status.FLINCH] = 0.2, }, -- Twister
+	["257"] = { [MoveData.Status.BURN] = 0.1, }, -- Heat Wave
+	["260"] = { [MoveData.Status.CONFUSION] = 1, }, -- Flatter
+	["261"] = { [MoveData.Status.BURN] = 1, }, -- Will-O-Wisp
+	["281"] = { [MoveData.Status.SLEEP] = 1, }, -- Yawn
+	["298"] = { [MoveData.Status.CONFUSION] = 1, }, -- Teeter Dance
+	["299"] = { [MoveData.Status.BURN] = 0.1, }, -- Blaze Kick
+	["302"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Needle Arm
+	["305"] = { [MoveData.Status.TOXIC] = 0.3, }, -- Poison Fang
+	["310"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Astonish
+	["320"] = { [MoveData.Status.SLEEP] = 1, }, -- Grass Whistle
+	["324"] = { [MoveData.Status.CONFUSION] = 0.1, }, -- Signal Beam
+	["326"] = { [MoveData.Status.FLINCH] = 0.1, }, -- Extrasensory
+	["340"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Bounce
+	["342"] = { [MoveData.Status.POISON] = 0.1, }, -- Poison Tail
+	["352"] = { [MoveData.Status.CONFUSION] = 0.2, }, -- Signal Beam
 }
 
 MoveData.ModifiesEnemyStat = {

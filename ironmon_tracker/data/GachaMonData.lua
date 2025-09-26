@@ -320,69 +320,71 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 	elseif (gachamon.AbilityId or 0) == AbilityData.Values.DroughtId then
 		badWeatherTypes[PokemonData.Types.WATER] = RS.OtherAdjustments.PenaltyWeatherAbilityWeakensMove
 	end
-	local compoundeyesBonus = nil
-	if (gachamon.AbilityId or 0) == AbilityData.Values.CompoundeyesId then
-		compoundeyesBonus = RS.OtherAdjustments.BonusAbilityCompoundeyesHelpsMove
-	end
-	local rockheadBonus = nil
-	if (gachamon.AbilityId or 0) == AbilityData.Values.RockHeadId then
-		rockheadBonus = RS.OtherAdjustments.BonusAbilityRockHeadHelpsMove
+	local goodWeatherTypes = {}
+	if (gachamon.AbilityId or 0) == AbilityData.Values.DrizzleId then
+		badWeatherTypes[PokemonData.Types.WATER] = RS.OtherAdjustments.BonusWeatherAbilityStrengthensMove
+	elseif (gachamon.AbilityId or 0) == AbilityData.Values.DroughtId then
+		badWeatherTypes[PokemonData.Types.FIRE] = RS.OtherAdjustments.BonusWeatherAbilityStrengthensMove
 	end
 
 	-- MOVES
-	local anyPhysicalDamagingMoves, anySpecialDamaingMoves = false, false
-	local iMoves = {}
-	for i, id in ipairs(gachamon.Temp.MoveIds or {}) do
-		iMoves[i] = {
-			id = id,
-			move = MoveData.getNatDexCompatible(id),
-			ePower = MoveData.getExpectedPower(id),
-			rating = RS.Moves[id] or 0,
-		}
-		-- Remove rating if banned move
-		if RulesetChanges.BannedMoves[id or 0] then
-			iMoves[i].rating = 0
-		-- "Adjusted moves" for now means to reduce rating by 50%
-		elseif RulesetChanges.AdjustedMoves[id or 0] then
-			iMoves[i].rating = iMoves[i].rating * 0.5
+	if false then
+		local anyPhysicalDamagingMoves, anySpecialDamaingMoves = false, false
+		local iMoves = {}
+		for i, id in ipairs(gachamon.Temp.MoveIds or {}) do
+			iMoves[i] = {
+				id = id,
+				move = MoveData.getNatDexCompatible(id),
+				ePower = MoveData.getExpectedPower(id),
+				rating = RS.Moves[id] or 0
+			}
+			-- Remove rating if banned move
+			if RulesetChanges.BannedMoves[id or 0] then
+				-- "Adjusted moves" for now means to reduce rating by 50%
+				iMoves[i].rating = 0
+			elseif RulesetChanges.AdjustedMoves[id or 0] then
+				iMoves[i].rating = iMoves[i].rating * 0.5
+			end
+			if iMoves[i].rating ~= 0 then
+				if iMoves[i].ePower > 0 then
+					if not anyPhysicalDamagingMoves and iMoves[i].move.category == MoveData.Categories.PHYSICAL then
+						anyPhysicalDamagingMoves = true
+					end
+					if not anySpecialDamaingMoves and iMoves[i].move.category == MoveData.Categories.SPECIAL then
+						anySpecialDamaingMoves = true
+					end
+					local moveType = iMoves[i].move.type or PokemonData.Types.UNKNOWN
+					if badWeatherTypes[moveType] then
+						local badWeatherPenalty = badWeatherTypes[moveType] or 1
+						iMoves[i].rating = iMoves[i].rating * badWeatherPenalty
+					end
+				end
+				if compoundeyesBonus and not MoveData.isOHKO(id) then
+					-- Check if accuracy of the move benefits from the ability
+					local acc = tonumber(iMoves[i].move.accuracy or "") or 0
+					if acc > 0 and acc < 100 then
+						iMoves[i].rating = iMoves[i].rating * compoundeyesBonus
+					end
+				end
+				if rockheadBonus and MoveData.isRecoil(id) then
+					iMoves[i].rating = iMoves[i].rating * rockheadBonus
+				end
+				if Utils.isSTAB(iMoves[i].move, iMoves[i].move.type, pokemonTypes) then
+					iMoves[i].rating = iMoves[i].rating * 1.5
+				end
+			end
 		end
-		if iMoves[i].rating ~= 0 then
-			if iMoves[i].ePower > 0 then
-				if not anyPhysicalDamagingMoves and iMoves[i].move.category == MoveData.Categories.PHYSICAL then
-					anyPhysicalDamagingMoves = true
-				end
-				if not anySpecialDamaingMoves and iMoves[i].move.category == MoveData.Categories.SPECIAL then
-					anySpecialDamaingMoves = true
-				end
-				local moveType = iMoves[i].move.type or PokemonData.Types.UNKNOWN
-				if badWeatherTypes[moveType] then
-					local badWeatherPenalty = badWeatherTypes[moveType] or 1
-					iMoves[i].rating = iMoves[i].rating * badWeatherPenalty
-				end
-			end
-			if compoundeyesBonus and not MoveData.isOHKO(id) then
-				-- Check if accuracy of the move benefits from the ability
-				local acc = tonumber(iMoves[i].move.accuracy or "") or 0
-				if acc > 0 and acc < 100 then
-					iMoves[i].rating = iMoves[i].rating * compoundeyesBonus
-				end
-			end
-			if rockheadBonus and MoveData.isRecoil(id) then
-				iMoves[i].rating = iMoves[i].rating * rockheadBonus
-			end
-			if Utils.isSTAB(iMoves[i].move, iMoves[i].move.type, pokemonTypes) then
-				iMoves[i].rating = iMoves[i].rating * 1.5
-			end
-		end
-	end
-	local movesRating = 0
-	if true then
+		local movesRating = 0
 		local penaltyRepeatedMove = RS.OtherAdjustments.PenaltyRepeatedMove or 1
 		for i, iMove in pairs(iMoves) do
 			-- Check for duplicate offensive move types; redundant typing coverage applies penalty to the move with the lower rating
 			for _, cMove in pairs(iMoves) do
 				-- If this iMoves rating is lower than compared-move, and compared-move matches type, and they both deal damage, adjust the iMove rating
-				if cMove and iMove.rating < cMove.rating and cMove.move.type == iMove.move.type and cMove.id ~= iMove.id and cMove.ePower > 0 and iMove.ePower > 0 then
+				if
+					cMove and iMove.rating < cMove.rating and cMove.move.type == iMove.move.type and cMove.id ~= iMove.id and
+						cMove.ePower > 0 and
+						iMove.ePower > 0
+				 then
 					iMove.rating = iMove.rating * penaltyRepeatedMove
 					break
 				end
@@ -391,7 +393,72 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 		end
 		movesRating = math.min(movesRating, RS.CategoryMaximums.Moves or 999)
 	else
+		local physicalDamagingMoves, specialDamagingMoves = 0, 0
+		local iMoves = {}
+		movesRating = 0
+		for i, id in ipairs(gachamon.Temp.MoveIds or {}) do
+			iMoves[i] = {
+				id = id,
+				move = MoveData.getNatDexCompatible(id),
+				ePower = MoveData.getExpectedPower(id),
+				rating = RS.Moves[id] or 0,
+			}
+			Utils.printDebug("--")
+			Utils.printDebug(iMoves[i].id or -1)
+			if RS.Moves[id] ~= nil then
+				iMoves[i].rating = RS.Moves[id],
+				Utils.printDebug("fixed rating")
+				Utils.printDebug(iMoves[i].rating)
+			else
+				if iMoves[i].move.category ~= MoveData.Categories.STATUS then
+					Utils.printDebug("non status move")
+					Utils.printDebug(iMoves[i].ePower)
+					Utils.printDebug(RS.OtherAdjustments.PowerModifier or "not found")
+					iMoves[i].rating = iMoves[i].ePower * (RS.OtherAdjustments.PowerModifier or 0)
+					Utils.printDebug(iMoves[i].rating)
 
+					if not anyPhysicalDamagingMoves and iMoves[i].move.category == MoveData.Categories.PHYSICAL then
+						physicalDamagingMoves = physicalDamagingMove + 1
+					end
+					if not anySpecialDamaingMoves and iMoves[i].move.category == MoveData.Categories.SPECIAL then
+						specialDamagingMoves = specialDamagingMoves + 1
+					end
+
+					--Type related Modifiers
+					local moveType = iMoves[i].move.type or PokemonData.Types.UNKNOWN
+					if badWeatherTypes[moveType] then
+						Utils.printDebug("ability weakens move")
+						local badWeatherPenalty = badWeatherTypes[moveType] or 1
+						iMoves[i].rating = iMoves[i].rating * badWeatherPenalty
+						Utils.printDebug(iMoves[i].rating)
+					end
+					if goodWeatherTypes[moveType] then
+						Utils.printDebug("ability strengthens move")
+						local goodWeatherBonus = goodWeatherTypes[moveType] or 1
+						iMoves[i].rating = iMoves[i].rating * goodWeatherBonus
+						Utils.printDebug(iMoves[i].rating)
+					end
+					if Utils.isSTAB(iMoves[i].move, iMoves[i].move.type, pokemonTypes) then
+						Utils.printDebug("STAB strengthens move")
+						iMoves[i].rating = iMoves[i].rating * 1.5
+						Utils.printDebug(iMoves[i].rating)
+					end
+				end
+				for status, chance in ipairs(MoveData.StatusInflicted[iMoves[i].id] or {}) do
+					Utils.printDebug("status effect")
+					Utils.printDebug(RS.OtherAdjustments.OnHitEffectRatings.status)
+					Utils.printDebug(iMoves[i].rating)
+					Utils.printDebug(chance)
+					statusRating = RS.OtherAdjustments.OnHitEffectRatings.status
+					iMoves[i].rating = iMoves[i].rating + statusRating * chance
+				end
+			end
+			movesRating = movesRating + iMoves[i].rating
+			Utils.printDebug("move rating")
+			Utils.printDebug(iMoves[i].rating)
+			Utils.printDebug("new rating")
+			Utils.printDebug(movesRating)
+		end
 	end
 	ratingTotal = ratingTotal + movesRating
 
