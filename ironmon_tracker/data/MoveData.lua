@@ -322,7 +322,7 @@ MoveData.StatusInflicted = {
 	["147"] = { [MoveData.Status.SLEEP] = 1, }, -- Spore
 	["157"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Rock Slide
 	["158"] = { [MoveData.Status.FLINCH] = 0.1, }, -- Hyper Fang
-	["160"] = { [MoveData.Status.PARALYSIS] = 1/15, [MoveData.Status.BURN] = 1/15, [MoveData.Status.FREEZE] = 1/15, }, -- Tri Attack
+	["161"] = { [MoveData.Status.PARALYSIS] = 1/15, [MoveData.Status.BURN] = 1/15, [MoveData.Status.FREEZE] = 1/15, }, -- Tri Attack
 	["172"] = { [MoveData.Status.BURN] = 0.1, }, -- FFlame Wheel
 	["173"] = { [MoveData.Status.FLINCH] = 0.3, }, -- Snore
 	["181"] = { [MoveData.Status.FREEZE] = 0.1, }, -- Powder Snow
@@ -353,80 +353,80 @@ MoveData.StatusInflicted = {
 }
 
 MoveData.ModifiesEnemyStat = {
-	["28"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Sand Attack
-	["39"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Tail Whip
-	["43"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Leer
-	["45"] = {[MoveData.Stats.ATK] = true, modifier = -1, chance = 1}, -- Growl
-	["51"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.1}, -- Acid
-	["61"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 0.1}, -- Bubble Beam
-	["62"] = {[MoveData.Stats.ATK] = true, modifier = -1, chance = 0.1}, -- Aurora Beam
-	["81"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- String Shot
-	["94"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.1}, -- Psychic
-	["103"] = {[MoveData.Stats.DEF] = true, modifier = -2, chance = 1}, -- Screech
-	["108"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Smokescreen
-	["132"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 0.1}, -- Constrict
-	["134"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Kinesis
-	["145"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 0.1}, -- Bubble
-	["148"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Flash
-	["178"] = {[MoveData.Stats.SPE] = true, modifier = -2, chance = 1}, -- Cotton Spore
-	["183"] = {[MoveData.Stats.SPE] = true, modifier = -2, chance = 1}, -- Scary Face
-	["189"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 1}, -- Mud Slap
-	["190"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 0.5}, -- Octazooka
-	["196"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- Icy Wind
-	["204"] = {[MoveData.Stats.ATK] = true, modifier = -2, chance = 1}, -- Charm
-	["207"] = {[MoveData.Stats.ATK] = true, modifier = 2, chance = 1}, -- Swagger
-	["230"] = {[MoveData.Stats.EVA] = true, modifier = -1, chance = 1}, -- Sweet Scent
-	["231"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.3}, -- Iron Tail
-	["242"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.2}, -- Crunch
-	["247"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.2}, -- Shadow Ball
-	["249"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.5}, -- Rock Smash
-	["260"] = {[MoveData.Stats.SPA] = true, modifier = 1, chance = 1}, -- Flatter
-	["295"] = {[MoveData.Stats.SPD] = true, modifier = -1, chance = 0.5}, -- Luster Purge
-	["296"] = {[MoveData.Stats.SPA] = true, modifier = -1, chance = 0.5}, -- Mist Ball
-	["297"] = {[MoveData.Stats.ATK] = true, modifier = -2, chance = 1}, -- Feather Dance
-	["305"] = {[MoveData.Stats.DEF] = true, modifier = -1, chance = 0.5}, -- Crush Claw
-	["313"] = {[MoveData.Stats.SPA] = true, modifier = -2, chance = 1}, -- Fake Tears
-	["317"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- Rock Tomb
-	["319"] = {[MoveData.Stats.SPD] = true, modifier = -2, chance = 1}, -- Metal Sound
-	["321"] = {[MoveData.Stats.ATK] = true, [MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Tickle
-	["330"] = {[MoveData.Stats.ACC] = true, modifier = -1, chance = 0.3}, -- Muddy Water
-	["341"] = {[MoveData.Stats.SPE] = true, modifier = -1, chance = 1}, -- Mud Shot
+	["28"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 1}, -- Sand Attack
+	["39"] = {stats = {MoveData.Stats.DEF}, modifier = -1, chance = 1}, -- Tail Whip
+	["43"] = {stats = {MoveData.Stats.DEF}, modifier = -1, chance = 1}, -- Leer
+	["45"] = {stats = {MoveData.Stats.ATK}, modifier = -1, chance = 1}, -- Growl
+	["51"] = {stats = {MoveData.Stats.DEF}, modifier = -1, chance = 0.1}, -- Acid
+	["61"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 0.1}, -- Bubble Beam
+	["62"] = {stats = {MoveData.Stats.ATK}, modifier = -1, chance = 0.1}, -- Aurora Beam
+	["81"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 1}, -- String Shot
+	["94"] = {stats = {MoveData.Stats.SPD}, modifier = -1, chance = 0.1}, -- Psychic
+	["103"] = {stats = {MoveData.Stats.DEF}, modifier = -2, chance = 1}, -- Screech
+	["108"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 1}, -- Smokescreen
+	["132"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 0.1}, -- Constrict
+	["134"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 1}, -- Kinesis
+	["145"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 0.1}, -- Bubble
+	["148"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 1}, -- Flash
+	["178"] = {stats = {MoveData.Stats.SPE}, modifier = -2, chance = 1}, -- Cotton Spore
+	["183"] = {stats = {MoveData.Stats.SPE}, modifier = -2, chance = 1}, -- Scary Face
+	["189"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 1}, -- Mud Slap
+	["190"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 0.5}, -- Octazooka
+	["196"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 1}, -- Icy Wind
+	["204"] = {stats = {MoveData.Stats.ATK}, modifier = -2, chance = 1}, -- Charm
+	["207"] = {stats = {MoveData.Stats.ATK}, modifier = 2, chance = 1}, -- Swagger
+	["230"] = {stats = {MoveData.Stats.EVA}, modifier = -1, chance = 1}, -- Sweet Scent
+	["231"] = {stats = {MoveData.Stats.DEF}, modifier = -1, chance = 0.3}, -- Iron Tail
+	["242"] = {stats = {MoveData.Stats.SPD}, modifier = -1, chance = 0.2}, -- Crunch
+	["247"] = {stats = {MoveData.Stats.SPD}, modifier = -1, chance = 0.2}, -- Shadow Ball
+	["249"] = {stats = {MoveData.Stats.DEF}, modifier = -1, chance = 0.5}, -- Rock Smash
+	["260"] = {stats = {MoveData.Stats.SPA}, modifier = 1, chance = 1}, -- Flatter
+	["295"] = {stats = {MoveData.Stats.SPD}, modifier = -1, chance = 0.5}, -- Luster Purge
+	["296"] = {stats = {MoveData.Stats.SPA}, modifier = -1, chance = 0.5}, -- Mist Ball
+	["297"] = {stats = {MoveData.Stats.ATK}, modifier = -2, chance = 1}, -- Feather Dance
+	["305"] = {stats = {MoveData.Stats.DEF}, modifier = -1, chance = 0.5}, -- Crush Claw
+	["313"] = {stats = {MoveData.Stats.SPA}, modifier = -2, chance = 1}, -- Fake Tears
+	["317"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 1}, -- Rock Tomb
+	["319"] = {stats = {MoveData.Stats.SPD}, modifier = -2, chance = 1}, -- Metal Sound
+	["321"] = {stats = {MoveData.Stats.ATK, MoveData.Stats.DEF}, modifier = -1, chance = 1}, -- Tickle
+	["330"] = {stats = {MoveData.Stats.ACC}, modifier = -1, chance = 0.3}, -- Muddy Water
+	["341"] = {stats = {MoveData.Stats.SPE}, modifier = -1, chance = 1}, -- Mud Shot
 }
 
 MoveData.ModifiesOwnStat = {
-	["14"] = { [MoveData.Stats.ATK] = true, modifier = 2, chance = 1}, -- Swords Dance
-	["74"] = { [MoveData.Stats.SPA] = true, modifier = 1, chance = 1}, -- Growth
-	["96"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 1}, -- Meditate
-	["97"] = { [MoveData.Stats.SPE] = true, modifier = 2, chance = 1}, -- Agility
-	["99"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 0.5}, -- Rage TODO impove method
-	["104"] = { [MoveData.Stats.EVA] = true, modifier = 1, chance = 1}, -- Double Team
-	["106"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Harden
-	["107"] = { [MoveData.Stats.EVA] = true, modifier = 1, chance = 1}, -- Minimize
-	["110"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Withdraw
-	["111"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Defense Curl
-	["112"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Barrier
-	["113"] = { [MoveData.Stats.SPD] = true, modifier = 2, chance = 1}, -- Light Screen TODO
-	["115"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Reflect TODO
-	["116"] = { [MoveData.Stats.CRT] = true, modifier = 2, chance = 1}, -- Focus Energy
-	["130"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Skull Bash
-	["133"] = { [MoveData.Stats.SPD] = true, modifier = 2, chance = 1}, -- Amnesia
-	["151"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Acid Armor
-	["159"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 1}, -- Sharpen TODO curse move 174
-	["211"] = { [MoveData.Stats.DEF] = true, modifier = 1, chance = 0.1}, -- Steel Wing
-	["232"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 0.1}, -- Metal Claw
-	["246"] = { [MoveData.Stats.ATK] = true,[MoveData.Stats.SPE] = true,[MoveData.Stats.DEF] = true,[MoveData.Stats.SPA] = true,[MoveData.Stats.SPD] = true, modifier = 1, chance = 0.1}, -- Ancient Power
-	["276"] = { [MoveData.Stats.ATK] = true, [MoveData.Stats.DEF] = true, modifier = -1, chance = 1}, -- Superpower
-	["294"] = { [MoveData.Stats.SPA] = true, modifier = 2, chance = 1}, -- Tail Glow
-	["309"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 0.2}, -- Meteor Mash
-	["315"] = { [MoveData.Stats.SPA] = true, modifier = -2, chance = 1}, -- Overheat
-	["318"] = { [MoveData.Stats.ATK] = true,[MoveData.Stats.SPE] = true,[MoveData.Stats.DEF] = true,[MoveData.Stats.SPA] = true,[MoveData.Stats.SPD] = true, modifier = 1, chance = 0.1}, -- Silver Wind
-	["322"] = { [MoveData.Stats.SPD] = true, [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Cosmic Power
-	["334"] = { [MoveData.Stats.DEF] = true, modifier = 2, chance = 1}, -- Iron Defense
-	["336"] = { [MoveData.Stats.ATK] = true, modifier = 1, chance = 1}, -- Howl
-	["339"] = { [MoveData.Stats.ATK] = true, [MoveData.Stats.DEF] = true, modifier = 1, chance = 1}, -- Bulk Up
-	["347"] = { [MoveData.Stats.SPA] = true, [MoveData.Stats.SPD] = true, modifier = 1, chance = 1}, -- Calm Mind
-	["349"] = { [MoveData.Stats.ATK] = true, [MoveData.Stats.SPE] = true, modifier = 1, chance = 1}, -- Dragon Dance
-	["354"] = { [MoveData.Stats.SPA] = true, modifier = -2, chance = 1}, -- Psycho Boost
+	["14"] = {stats = {MoveData.Stats.ATK}, modifier = 2, chance = 1}, -- Swords Dance
+	["74"] = {stats = {MoveData.Stats.SPA}, modifier = 1, chance = 1}, -- Growth
+	["96"] = {stats = {MoveData.Stats.ATK}, modifier = 1, chance = 1}, -- Meditate
+	["97"] = {stats = {MoveData.Stats.SPE}, modifier = 2, chance = 1}, -- Agility
+	["99"] = {stats = {MoveData.Stats.ATK}, modifier = 1, chance = 0.5}, -- Rage TODO impove method
+	["104"] = {stats = {MoveData.Stats.EVA}, modifier = 1, chance = 1}, -- Double Team
+	["106"] = {stats = {MoveData.Stats.DEF}, modifier = 1, chance = 1}, -- Harden
+	["107"] = {stats = {MoveData.Stats.EVA}, modifier = 1, chance = 1}, -- Minimize
+	["110"] = {stats = {MoveData.Stats.DEF}, modifier = 1, chance = 1}, -- Withdraw
+	["111"] = {stats = {MoveData.Stats.DEF}, modifier = 1, chance = 1}, -- Defense Curl
+	["112"] = {stats = {MoveData.Stats.DEF}, modifier = 2, chance = 1}, -- Barrier
+	["113"] = {stats = {MoveData.Stats.SPD}, modifier = 2, chance = 1}, -- Light Screen TODO
+	["115"] = {stats = {MoveData.Stats.DEF}, modifier = 2, chance = 1}, -- Reflect TODO
+	["116"] = {stats = {MoveData.Stats.CRT}, modifier = 2, chance = 1}, -- Focus Energy
+	["130"] = {stats = {MoveData.Stats.DEF}, modifier = 1, chance = 1}, -- Skull Bash
+	["133"] = {stats = {MoveData.Stats.SPD}, modifier = 2, chance = 1}, -- Amnesia
+	["151"] = {stats = {MoveData.Stats.DEF}, modifier = 2, chance = 1}, -- Acid Armor
+	["159"] = {stats = {MoveData.Stats.ATK}, modifier = 1, chance = 1}, -- Sharpen TODO curse move 174
+	["211"] = {stats = {MoveData.Stats.DEF}, modifier = 1, chance = 0.1}, -- Steel Wing
+	["232"] = {stats = {MoveData.Stats.ATK}, modifier = 1, chance = 0.1}, -- Metal Claw
+	["246"] = {stats = {MoveData.Stats.ATK, MoveData.Stats.SPE, MoveData.Stats.DEF, MoveData.Stats.SPA, MoveData.Stats.SPD}, modifier = 1, chance = 0.1}, -- Ancient Power
+	["276"] = {stats = {MoveData.Stats.ATK, MoveData.Stats.DEF}, modifier = -1, chance = 1}, -- Superpower
+	["294"] = {stats = {MoveData.Stats.SPA}, modifier = 2, chance = 1}, -- Tail Glow
+	["309"] = {stats = {MoveData.Stats.ATK}, modifier = 1, chance = 0.2}, -- Meteor Mash
+	["315"] = {stats = {MoveData.Stats.SPA}, modifier = -2, chance = 1}, -- Overheat
+	["318"] = {stats = {MoveData.Stats.ATK, MoveData.Stats.SPE, MoveData.Stats.DEF, MoveData.Stats.SPA, MoveData.Stats.SPD}, modifier = 1, chance = 0.1}, -- Silver Wind
+	["322"] = {stats = {MoveData.Stats.SPD, MoveData.Stats.DEF}, modifier = 1, chance = 1}, -- Cosmic Power
+	["334"] = {stats = {MoveData.Stats.DEF}, modifier = 2, chance = 1}, -- Iron Defense
+	["336"] = {stats = {MoveData.Stats.ATK}, modifier = 1, chance = 1}, -- Howl
+	["339"] = {stats = {MoveData.Stats.ATK, MoveData.Stats.DEF}, modifier = 1, chance = 1}, -- Bulk Up
+	["347"] = {stats = {MoveData.Stats.SPA, MoveData.Stats.SPD}, modifier = 1, chance = 1}, -- Calm Mind
+	["349"] = {stats = {MoveData.Stats.ATK, MoveData.Stats.SPE}, modifier = 1, chance = 1}, -- Dragon Dance
+	["354"] = {stats = {MoveData.Stats.SPA}, modifier = -2, chance = 1}, -- Psycho Boost
 }
 
 MoveData.IsSelfHitOnMiss = {
@@ -439,7 +439,7 @@ MoveData.IsHighCritMove = {
 	[ "75"] = true, -- Razor Leaf
 	[ "143"] = true, -- Sky Attack
 	[ "152"] = true, -- Crab Hammer
-	[ "162"] = true, -- Slash
+	[ "163"] = true, -- Slash
 	[ "177"] = true, -- Aeroblast
 	[ "238"] = true, -- Cross Chop
 	[ "299"] = true, -- Blaze Kick

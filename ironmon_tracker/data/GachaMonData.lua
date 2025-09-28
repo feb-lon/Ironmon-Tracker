@@ -393,36 +393,30 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 		end
 		movesRating = math.min(movesRating, RS.CategoryMaximums.Moves or 999)
 	else
-		local physicalDamagingMoves, specialDamagingMoves = 0, 0
 		local iMoves = {}
 		movesRating = 0
-		for i, id in ipairs(gachamon.Temp.MoveIds or {}) do
-			iMoves[i] = {
-				id = id,
-				move = MoveData.getNatDexCompatible(id),
-				ePower = MoveData.getExpectedPower(id),
-				rating = RS.Moves[id] or 0,
-			}
+		--for i, id in ipairs(gachamon.Temp.MoveIds or {}) do
+		for i = 159,165,1 do
 			Utils.printDebug("--")
-			Utils.printDebug(iMoves[i].id or -1)
+			Utils.printDebug(i)
+			iMoves[i] = {
+				id = i,
+				move = MoveData.getNatDexCompatible(i),
+				ePower = MoveData.getExpectedPower(i),
+				rating = RS.Moves[i] or 0,
+			}
+			Utils.printDebug(MoveData.Moves[i].name)
+			--Utils.printDebug(iMoves[i].id or -1)
 			if RS.Moves[id] ~= nil then
 				iMoves[i].rating = RS.Moves[id],
 				Utils.printDebug("fixed rating")
 				Utils.printDebug(iMoves[i].rating)
 			else
+				-- rate the move based on thow good it is at dealing damage
 				if iMoves[i].move.category ~= MoveData.Categories.STATUS then
-					Utils.printDebug("non status move")
-					Utils.printDebug(iMoves[i].ePower)
-					Utils.printDebug(RS.OtherAdjustments.PowerModifier or "not found")
+					Utils.printDebug("non status move with power rating")
 					iMoves[i].rating = iMoves[i].ePower * (RS.OtherAdjustments.PowerModifier or 0)
 					Utils.printDebug(iMoves[i].rating)
-
-					if not anyPhysicalDamagingMoves and iMoves[i].move.category == MoveData.Categories.PHYSICAL then
-						physicalDamagingMoves = physicalDamagingMove + 1
-					end
-					if not anySpecialDamaingMoves and iMoves[i].move.category == MoveData.Categories.SPECIAL then
-						specialDamagingMoves = specialDamagingMoves + 1
-					end
 
 					--Type related Modifiers
 					local moveType = iMoves[i].move.type or PokemonData.Types.UNKNOWN
@@ -444,20 +438,31 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 						Utils.printDebug(iMoves[i].rating)
 					end
 				end
-				for status, chance in ipairs(MoveData.StatusInflicted[iMoves[i].id] or {}) do
-					Utils.printDebug("status effect")
-					Utils.printDebug(RS.OtherAdjustments.OnHitEffectRatings.status)
-					Utils.printDebug(iMoves[i].rating)
-					Utils.printDebug(chance)
-					statusRating = RS.OtherAdjustments.OnHitEffectRatings.status
+				-- rate the move's value regarding status infliction, needs for loop only due to tri attack
+				for status, chance in pairs(MoveData.StatusInflicted[tostring(iMoves[i].id)] or {}) do
+					local statusRating = RS.OtherAdjustments.OnHitEffectRatings[status]
+					Utils.printDebug(status)
 					iMoves[i].rating = iMoves[i].rating + statusRating * chance
+					Utils.printDebug(iMoves[i].rating)
 				end
+				-- rate the move's value regarding status drops / increases on the opponent
+				-- modifier and chance outside loop works due to them always being the same for all effects
+				local modifier = (MoveData.ModifiesEnemyStat[tostring(iMoves[i].id)] or {})["modifier"] or 0
+				local chance = (MoveData.ModifiesEnemyStat[tostring(iMoves[i].id)] or {})["chance"] or 0
+				local opponentStatModificationRating = 0
+				for j, stat in ipairs((MoveData.ModifiesEnemyStat[tostring(iMoves[i].id)] or {})["stats"] or {}) do
+					Utils.printDebug("opponentStatModificationRating")
+					Utils.printDebug(stat)
+					local statRating = RS.OtherAdjustments.OnHitEffectRatings["EnemyStatModificationRating"] or 0
+					Utils.printDebug(chance * -1 * modifier * statRating)
+					-- TODO think about whether +2 ATK for swagger should be rated exactly opposite to -2 ATK for Charm
+					opponentStatModificationRating = opponentStatModificationRating + chance * -1 * modifier * statRating
+				end
+				iMoves[i].rating = iMoves[i].rating + opponentStatModificationRating
 			end
 			movesRating = movesRating + iMoves[i].rating
 			Utils.printDebug("move rating")
 			Utils.printDebug(iMoves[i].rating)
-			Utils.printDebug("new rating")
-			Utils.printDebug(movesRating)
 		end
 	end
 	ratingTotal = ratingTotal + movesRating
