@@ -218,13 +218,23 @@
 		"ContactModifier": 0.98,
 		"HighCritModifier": 1.06,
 		"RecoilModifier": 0.5,
-		"DrainMoveRating": 2.5,
-		"SkipTurnAfterwardsModifier": 0.6,
+		"SkipTurnAfterwardsModifier": 0.5,
+		"HasGenericPreparationTurn": 0.6,
 		"lowUseFeatureModifier": 0.25,
 		"UselessFeatureModifier": 0,
-		"MoveWithoutPowerHasImmuneOpponentsPenalty": 0.925,
+		"WrapEnemyModifier": 3,
+
 		"PowerModifier": 0.1,
-		"AccuracyModifier": 1,
+		"AccuracyPenaltyModifier": 1.1,
+
+		"HighPriorityRating": 1.5,
+		"DrainMoveRating": 3,
+		"ItemStealModifier": 1.4,
+		"ItemStealMinimumRating": 5,
+
+		"OHKORating": 6.5,
+		"MoveWithoutPowerHasImmuneOpponentsPenalty": 0.925,
+
 		"PPModifier": {
 			"5": 0.96,
 			"10": 1,
@@ -241,15 +251,32 @@
 			"burn": 4,
 			"freeze": 4,
 			"confusion": 4,
+			"flinch": 3,
 			"poison": 3,
+			"infatuation": 4,
 			"toxic": 3.5,
-			"EnemyStatModificationRating": 3,
-			"OwnStatModificationRating": 4
+			"EnemyStatDropRating": 2,
+			"OwnStatDropRatingLoss": 2.5,
+			"OwnStatIncreaseRating": 3
 		},
 		"MoveWithPowerTypeRating": {
-			"Normal": 1,
-			"Grass": 1.02,
-			"Water": 1.02
+			"normal": 1,
+			"fighting": 1,
+			"flying": 1.03,
+			"poison": 0.99,
+			"ground": 1.05,
+			"rock": 1.1,
+			"bug": 1.05,
+			"ghost": 1.04,
+			"steel": 1,
+			"ice": 1.05,
+			"dark": 1.03,
+			"grass": 1.02,
+			"water": 1.02,
+			"dragon": 1.03,
+			"electric": 1.05,
+			"fire": 1.04,
+			"psychic": 1
 		}
 	},
 	"RatingToStars": [

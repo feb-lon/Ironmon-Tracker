@@ -310,8 +310,8 @@ MoveData.StatusInflicted = {
 	["95"] = { [MoveData.Status.SLEEP] = 1, }, -- Hypnosis
 	["109"] = { [MoveData.Status.CONFUSION] = 1, }, -- Confuse Ray
 	["122"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Lick
-	["123"] = { [MoveData.Status.POISON] = 0.4, }, -- Poison Powder
-	["123"] = { [MoveData.Status.POISON] = 0.3, }, -- Sludge
+	["123"] = { [MoveData.Status.POISON] = 0.4, }, -- Smog
+	["124"] = { [MoveData.Status.POISON] = 0.3, }, -- Sludge
 	["125"] = { [MoveData.Status.FLINCH] = 0.1, }, -- Bone Club
 	["126"] = { [MoveData.Status.BURN] = 0.1, }, -- Fire Blast
 	["137"] = { [MoveData.Status.PARALYSIS] = 1, }, -- Glare
@@ -335,6 +335,7 @@ MoveData.StatusInflicted = {
 	["223"] = { [MoveData.Status.CONFUSION] = 1, }, -- Dynamic Punch
 	["225"] = { [MoveData.Status.PARALYSIS] = 0.3, }, -- Dragon Breath
 	["239"] = { [MoveData.Status.FLINCH] = 0.2, }, -- Twister
+	["252"] = { [MoveData.Status.FLINCH] = 1, }, -- Fake Out
 	["257"] = { [MoveData.Status.BURN] = 0.1, }, -- Heat Wave
 	["260"] = { [MoveData.Status.CONFUSION] = 1, }, -- Flatter
 	["261"] = { [MoveData.Status.BURN] = 1, }, -- Will-O-Wisp
@@ -429,7 +430,7 @@ MoveData.ModifiesOwnStat = {
 	["354"] = {stats = {MoveData.Stats.SPA}, modifier = -2, chance = 1}, -- Psycho Boost
 }
 
-MoveData.IsSelfHitOnMiss = {
+MoveData.IsJumpKick = {
 	[ "26"] = true, -- Jump Kick
 	[ "136"] = true, -- High Jump Kick
 }
@@ -487,22 +488,22 @@ MoveData.RequiresSleeping = {
 	[ "173"] = true, -- Snore
 }
 
--- 1 = generic, 2 = flying, 3 = under ground, 4 = under water, 5 = skipped by sun
+-- 1 = generic, 2 = skipped by sun, 3 = under ground, 4 = under water, 5 = flying
 MoveData.ChargeUpTurn = {
 	[ "13"] = 1, -- Razor Wind
-	[ "19"] = 2, -- Fly
+	[ "19"] = 5, -- Fly
 	[ "76"] = 5, -- Solar Beam
 	[ "91"] = 3, -- Dig
 	[ "130"] = 1, -- Skull Bash
 	[ "143"] = 1, -- Sky Attack
 	[ "291"] = 4, -- Dive
-	[ "340"] = 2, -- Bounce
+	[ "340"] = 5, -- Bounce
 }
 
 -- 1 = flying, 2 = under ground, 3 = under water, 4 = minimized mons, 5 = paralyzed mons,
 -- 6 = on switch, 7 = user para/burn/poisoned -> double power, 8 = enemy para'd -> double power + cure
 -- 9 = normal dmg vs flying
-MoveData.DoubleDamageVersus = {
+MoveData.DoubleDamageOrPower = {
 	[ "16"] = 1, -- Gust
 	[ "57"] = 3, -- Surf
 	[ "87"] = 9, -- Thunder
@@ -570,6 +571,7 @@ MoveData.IsHighPriorityMove = {
 	[ "98"] = true, -- Quick Attack
 	[ "182"] = true, -- Mach Punch
 	[ "245"] = true, -- Extreme Speed
+	[ "252"] = true, -- Fake Out
 }
 
 MoveData.FailsIfDamaged = {
@@ -758,6 +760,13 @@ function MoveData.getNatDexCompatible(moveId)
 	return MoveData.BlankMove
 end
 
+---Returns true if the move is a Move with high crit chance (i.e. Leaf Blade)
+---@param moveId number|string
+---@return boolean
+function MoveData.isHighCrit(moveId)
+	return MoveData.IsHighCritMove[tostring(moveId)] ~= nil
+end
+
 ---Returns true if the move is a One-Hit KO move (i.e. Sheer Cold)
 ---@param moveId number|string
 ---@return boolean
@@ -853,7 +862,7 @@ function MoveData.getExpectedPower(moveId)
 	}
 	-- https://bulbapedia.bulbagarden.net/wiki/Multi-strike_move#Fixed_number_of_multiple_strikes
 	local doubleHitMoves = {
-		[155] = true, [24] = true
+		[155] = true, [41] = true, [24] = true
 	}
 
 	local power = tonumber(MoveData.Moves[moveId].power) or 0

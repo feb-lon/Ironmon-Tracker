@@ -3,24 +3,19 @@ GachaMonData = {
 	MAX_BATTLE_POWER = 15000,
 	SHINY_ODDS = 0.004695, -- 1 in 213 odds. (Pokémon Go and Pokémon Sleep use ~1/500)
 	TRAINERS_TO_DEFEAT = 2, -- The number of trainers a Pokémon needs to defeat to automatically be kept in the player's permanent Collection
-
 	-- The user's entire GachaMon collection (ordered list). Populated from file only when the user first goes to view the Collection on the Tracker
 	Collection = {}, ---@type table<number, IGachaMon>
-
 	-- Stores the GachaMons for the current gameplay session only. Table key is the sum of the Pokémon's personality value & its pokemon id
 	RecentMons = {}, ---@type table<number, IGachaMon>
-
 	-- Populated on Tracker startup from the ratings data json file
 	RatingsSystem = {}, ---@type table<string, table>
-
 	-- GachaDex tracking various stats and info about the collection status and seen mons
 	DexData = {
 		NumCollected = 0,
 		NumSeen = 0,
 		PercentageComplete = 0,
-		SeenMons = {}, ---@type table<number, boolean>
+		SeenMons = {} ---@type table<number, boolean>
 	}, ---@type table<string, any>
-
 	-- A one-time initial collection load when the Collection is first viewed
 	initialCollectionLoaded = false,
 	-- A one-time initial recent mons load when the game starts (player is in game, on the map)
@@ -40,7 +35,7 @@ GachaMonData = {
 	-- The current ruleset being used for the current game. Automatically determined after the New Run profiles are loaded.
 	rulesetKey = "Standard",
 	-- If the ruleset was automatically determined from the New Run profile settings (mostly used for a UI label in options tab)
-	rulesetAutoDetected = false,
+	rulesetAutoDetected = false
 }
 
 --[[
@@ -63,7 +58,6 @@ TODO LATER:
 - [Card] Add Nickname; research how many bytes it takes up
 - [Bug] low-prority; If still viewing a card pack opening and swap to a new mon, no new pack is created for it (might be as easy as check if recentMon ~= nil)
 ]]
-
 -- For now, disable most/all GachaMon features if playing on MGBA emulator (aka. not Bizhawk)
 function GachaMonData.isCompatibleWithEmulator()
 	return Main.IsOnBizhawk()
@@ -77,7 +71,7 @@ function GachaMonData.initialize()
 		NumCollected = 0,
 		NumSeen = 0,
 		PercentageComplete = 0,
-		SeenMons = {},
+		SeenMons = {}
 	}
 	GachaMonData.initialCollectionLoaded = false
 	GachaMonData.initialRecentMonsLoaded = false
@@ -166,21 +160,24 @@ end
 ---@param pokemonData IPokemon
 ---@return IGachaMon gachamon
 function GachaMonData.convertPokemonToGachaMon(pokemonData)
-	local gachamon = GachaMonData.IGachaMon:new({
-		Version = GachaMonFileManager.Version,
-		Personality = pokemonData.personality or 0,
-		PokemonId = pokemonData.pokemonID or 0,
-		Level = pokemonData.level or 0,
-		SeedNumber = Main.currentSeed or 0,
-		Temp = {
-			Stats = {},
-			MoveIds = {},
-			GameVersion = GachaMonData.gameVersionToNumber(GameSettings.versioncolor),
-			IsShiny = pokemonData.isShiny and 1 or 0,
-			Nature = pokemonData.nature or 0,
-			DateTimeObtained = os.time(),
-		},
-	})
+	local gachamon =
+		GachaMonData.IGachaMon:new(
+		{
+			Version = GachaMonFileManager.Version,
+			Personality = pokemonData.personality or 0,
+			PokemonId = pokemonData.pokemonID or 0,
+			Level = pokemonData.level or 0,
+			SeedNumber = Main.currentSeed or 0,
+			Temp = {
+				Stats = {},
+				MoveIds = {},
+				GameVersion = GachaMonData.gameVersionToNumber(GameSettings.versioncolor),
+				IsShiny = pokemonData.isShiny and 1 or 0,
+				Nature = pokemonData.nature or 0,
+				DateTimeObtained = os.time()
+			}
+		}
+	)
 
 	local pokemonInternal = PokemonData.getNatDexCompatible(gachamon.PokemonId)
 
@@ -303,7 +300,7 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 		local safeSandTypes = {
 			[PokemonData.Types.GROUND] = true,
 			[PokemonData.Types.ROCK] = true,
-			[PokemonData.Types.STEEL] = true,
+			[PokemonData.Types.STEEL] = true
 		}
 		if safeSandTypes[pokemonTypes[1] or false] or safeSandTypes[pokemonTypes[2] or false] then
 			abilityRating = abilityRating + (RS.OtherAdjustments.BonusAbilitySandStreamSafe or 0)
@@ -327,6 +324,7 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 		badWeatherTypes[PokemonData.Types.FIRE] = RS.OtherAdjustments.BonusWeatherAbilityStrengthensMove
 	end
 
+	file = io.open("ratings.txt", "w")
 	-- MOVES
 	if false then
 		local anyPhysicalDamagingMoves, anySpecialDamaingMoves = false, false
@@ -394,77 +392,159 @@ function GachaMonData.calculateRatingScore(gachamon, baseStats)
 		movesRating = math.min(movesRating, RS.CategoryMaximums.Moves or 999)
 	else
 		local iMoves = {}
+		debug = true
 		movesRating = 0
 		--for i, id in ipairs(gachamon.Temp.MoveIds or {}) do
-		for i = 159,165,1 do
+		for i = 1, 354, 1 do
 			Utils.printDebug("--")
 			Utils.printDebug(i)
+			local id = i
 			iMoves[i] = {
 				id = i,
-				move = MoveData.getNatDexCompatible(i),
-				ePower = MoveData.getExpectedPower(i),
-				rating = RS.Moves[i] or 0,
+				move = MoveData.getNatDexCompatible(id),
+				ePower = MoveData.getExpectedPower(id),
+				powerRating = 0,
+				effectRating = 0,
+				accuracyRating = 0,
+				rating = 0
 			}
 			Utils.printDebug(MoveData.Moves[i].name)
+			local ppRating = RS.OtherAdjustments.PPModifier[tostring(iMoves[i].move.pp)] or 0
 			--Utils.printDebug(iMoves[i].id or -1)
 			if RS.Moves[id] ~= nil then
-				iMoves[i].rating = RS.Moves[id],
-				Utils.printDebug("fixed rating")
+				--Moves with fixed rating
+				iMoves[i].rating = RS.Moves[id], Utils.printDebug("fixed rating")
+				Utils.printDebug(iMoves[i].rating)
+			elseif MoveData.isOHKO(id) then
+				--OHKOs
+				iMoves[i].rating = RS.OtherAdjustments.OHKORating or 0
+				if iMoves[i].move.type ~= PokemonData.Types.ICE then
+					-- only sheer cold does not have immune opponents
+					iMoves[i].rating = iMoves[i].rating * (RS.OtherAdjustments.MoveWithoutPowerHasImmuneOpponentsPenalty or 1)
+				end
+				Utils.printDebug("OHKO move")
 				Utils.printDebug(iMoves[i].rating)
 			else
-				-- rate the move based on thow good it is at dealing damage
-				if iMoves[i].move.category ~= MoveData.Categories.STATUS then
+				if iMoves[i].move.category == MoveData.Categories.STATUS then
+					-- status move
+					Utils.printDebug("status move")
+				elseif iMoves[i].ePower > 0 then
+					-- rate the move based on how good it is at dealing damage
 					Utils.printDebug("non status move with power rating")
-					iMoves[i].rating = iMoves[i].ePower * (RS.OtherAdjustments.PowerModifier or 0)
-					Utils.printDebug(iMoves[i].rating)
+					iMoves[i].powerRating = iMoves[i].ePower * (RS.OtherAdjustments.PowerModifier or 1)
+					Utils.printDebug(iMoves[i].powerRating)
 
-					--Type related Modifiers
 					local moveType = iMoves[i].move.type or PokemonData.Types.UNKNOWN
+					--Weather
 					if badWeatherTypes[moveType] then
 						Utils.printDebug("ability weakens move")
 						local badWeatherPenalty = badWeatherTypes[moveType] or 1
-						iMoves[i].rating = iMoves[i].rating * badWeatherPenalty
-						Utils.printDebug(iMoves[i].rating)
+						iMoves[i].powerRating = iMoves[i].powerRating * badWeatherPenalty
+						Utils.printDebug(iMoves[i].powerRating)
 					end
 					if goodWeatherTypes[moveType] then
 						Utils.printDebug("ability strengthens move")
 						local goodWeatherBonus = goodWeatherTypes[moveType] or 1
-						iMoves[i].rating = iMoves[i].rating * goodWeatherBonus
-						Utils.printDebug(iMoves[i].rating)
+						iMoves[i].powerRating = iMoves[i].powerRating * goodWeatherBonus
+						Utils.printDebug(iMoves[i].powerRating)
 					end
-					if Utils.isSTAB(iMoves[i].move, iMoves[i].move.type, pokemonTypes) then
+					--STAB
+					if (not debug and Utils.isSTAB(iMoves[i].move, iMoves[i].move.type, pokemonTypes)) then
 						Utils.printDebug("STAB strengthens move")
-						iMoves[i].rating = iMoves[i].rating * 1.5
-						Utils.printDebug(iMoves[i].rating)
+						iMoves[i].powerRating = iMoves[i].powerRating * 1.5
+						Utils.printDebug(iMoves[i].powerRating)
 					end
+					-- Recoil
+					if MoveData.isRecoil(id) then
+						iMoves[i].powerRating = iMoves[i].powerRating * (RS.OtherAdjustments.RecoilModifier or 1)
+					end
+					-- High Crit Chance
+					if MoveData.isHighCrit(id) then
+						iMoves[i].powerRating = iMoves[i].powerRating * (RS.OtherAdjustments.HighCritModifier or 1)
+					end
+					-- Type Rating
+					Utils.printDebug("finished evaluating power rating")
+					iMoves[i].powerRating =
+						iMoves[i].powerRating * (RS.OtherAdjustments.MoveWithPowerTypeRating[tostring(moveType)] or 1)
+					Utils.printDebug(iMoves[i].powerRating)
+				else
+					Utils.printDebug("Damaging Move without Power has no Rating")
 				end
+
+				Utils.printDebug("before status Rating")
 				-- rate the move's value regarding status infliction, needs for loop only due to tri attack
 				for status, chance in pairs(MoveData.StatusInflicted[tostring(iMoves[i].id)] or {}) do
+					Utils.printDebug("status Rating")
 					local statusRating = RS.OtherAdjustments.OnHitEffectRatings[status]
 					Utils.printDebug(status)
-					iMoves[i].rating = iMoves[i].rating + statusRating * chance
-					Utils.printDebug(iMoves[i].rating)
+					iMoves[i].effectRating = iMoves[i].effectRating + statusRating * chance
+					Utils.printDebug(iMoves[i].effectRating)
 				end
+
+				Utils.printDebug("before enemy stat Rating")
 				-- rate the move's value regarding status drops / increases on the opponent
-				-- modifier and chance outside loop works due to them always being the same for all effects
+				-- modifier and chance outside loop due to them always being the same for all effects
 				local modifier = (MoveData.ModifiesEnemyStat[tostring(iMoves[i].id)] or {})["modifier"] or 0
 				local chance = (MoveData.ModifiesEnemyStat[tostring(iMoves[i].id)] or {})["chance"] or 0
-				local opponentStatModificationRating = 0
 				for j, stat in ipairs((MoveData.ModifiesEnemyStat[tostring(iMoves[i].id)] or {})["stats"] or {}) do
-					Utils.printDebug("opponentStatModificationRating")
+					Utils.printDebug("opponent Stat Modification Rating")
 					Utils.printDebug(stat)
-					local statRating = RS.OtherAdjustments.OnHitEffectRatings["EnemyStatModificationRating"] or 0
+					local statRating =  0
+					if modifier < 0 then
+						-- ignore enemy stat raises for now (only 2 moves -> swagger and ???)
+						statRating = RS.OtherAdjustments.OnHitEffectRatings.EnemyStatDropRating or 0
+					end
 					Utils.printDebug(chance * -1 * modifier * statRating)
-					-- TODO think about whether +2 ATK for swagger should be rated exactly opposite to -2 ATK for Charm
-					opponentStatModificationRating = opponentStatModificationRating + chance * -1 * modifier * statRating
+					iMoves[i].effectRating = iMoves[i].effectRating + chance * -1 * modifier * statRating
 				end
-				iMoves[i].rating = iMoves[i].rating + opponentStatModificationRating
+
+				Utils.printDebug("before own stat Rating")
+				-- rate the move's value regarding status drops / increases on the user
+				-- modifier and chance outside loop due to them always being the same for all effects
+				modifier = (MoveData.ModifiesOwnStat[tostring(iMoves[i].id)] or {})["modifier"] or 0
+				chance = (MoveData.ModifiesOwnStat[tostring(iMoves[i].id)] or {})["chance"] or 0
+				for j, stat in ipairs((MoveData.ModifiesOwnStat[tostring(iMoves[i].id)] or {})["stats"] or {}) do
+					Utils.printDebug("own Stat Modification Rating")
+					Utils.printDebug(stat)
+					local statRating = 0
+					if modifier > 0 then
+						statRating = RS.OtherAdjustments.OnHitEffectRatings.OwnStatIncreaseRating or 0
+					else
+						statRating = RS.OtherAdjustments.OnHitEffectRatings.OwnStatDropRatingLoss or 0
+					end
+					Utils.printDebug(chance * modifier * statRating)
+					iMoves[i].effectRating = iMoves[i].effectRating + chance * modifier * statRating
+				end
+
+				Utils.printDebug("before acc rating")
+				-- Accuracy Modifier
+				local accuracy = iMoves[i].move.accuracy or 0
+				local perfectAccuracyModifier = 1
+				if accuracy*1 == 0 then
+					Utils.printDebug("has perfect accuracy")
+					accuracy = 100
+					perfectAccuracyModifier = RS.OtherAdjustments.PerfectAccuracyModifier or 0
+				end
+				accuracy = accuracy / 100
+				Utils.printDebug("accuracy rating")
+				-- we rate accuracy by rating the miss chance
+				iMoves[i].accuracyRating =
+					(1 - (1 - accuracy) * (RS.OtherAdjustments.AccuracyPenaltyModifier or 0) ) * perfectAccuracyModifier
+				Utils.printDebug(iMoves[i].accuracyRating)
+
+				iMoves[i].rating = (iMoves[i].powerRating + iMoves[i].effectRating) * iMoves[i].accuracyRating * ppRating
 			end
+
+			Utils.printDebug("finished rating, moving to printing")
+			file:write(iMoves[i].rating, "\n")
+			Utils.printDebug("finished printing")
+
 			movesRating = movesRating + iMoves[i].rating
 			Utils.printDebug("move rating")
-			Utils.printDebug(iMoves[i].rating)
+			Utils.printDebug(iMoves[i].rating or -1)
 		end
 	end
+	file:close()
 	ratingTotal = ratingTotal + movesRating
 
 	-- STATS (OFFENSIVE)
@@ -620,28 +700,31 @@ end
 ---Creates a fake, random GachaMon; mostly to show what a sample card looks like
 ---@return IGachaMon gachamon
 function GachaMonData.createRandomGachaMon()
-	local gachamon = GachaMonData.IGachaMon:new({
-		Version = GachaMonFileManager.Version,
-		Personality = -1,
-		Level = math.random(1, 100),
-		AbilityId = math.random(1, AbilityData.getTotal()),
-		SeedNumber = math.random(1, 29999),
-		Temp = {
-			Stats = {},
-			MoveIds = {
-				math.random(1, MoveData.getTotal()),
-				math.random(1, MoveData.getTotal()),
-				math.random(1, MoveData.getTotal()),
-				math.random(1, MoveData.getTotal()),
-			},
-			GameVersion = math.random(1, 5),
-			IsShiny = 0,
-			Gender = math.random(1, 2),
-			Nature = math.random(0, 24),
-			DateTimeObtained = os.time(),
-			PreventSaving = true,
-		},
-	})
+	local gachamon =
+		GachaMonData.IGachaMon:new(
+		{
+			Version = GachaMonFileManager.Version,
+			Personality = -1,
+			Level = math.random(1, 100),
+			AbilityId = math.random(1, AbilityData.getTotal()),
+			SeedNumber = math.random(1, 29999),
+			Temp = {
+				Stats = {},
+				MoveIds = {
+					math.random(1, MoveData.getTotal()),
+					math.random(1, MoveData.getTotal()),
+					math.random(1, MoveData.getTotal()),
+					math.random(1, MoveData.getTotal())
+				},
+				GameVersion = math.random(1, 5),
+				IsShiny = 0,
+				Gender = math.random(1, 2),
+				Nature = math.random(0, 24),
+				DateTimeObtained = os.time(),
+				PreventSaving = true
+			}
+		}
+	)
 
 	gachamon.PokemonId = Utils.randomPokemonID()
 
@@ -701,13 +784,16 @@ function GachaMonData.createPokemonDataFromDefeatedTrainers()
 		local trainerData = Program.readTrainerGameData(trainerId)
 		trainerData.party = trainerData.party or {}
 		-- Sort their party by BST then level (easier to obtain legendaries/mythical this way)
-		table.sort(trainerData.party, function(a, b)
-			local pokemonA = PokemonData.getNatDexCompatible(a.pokemonID)
-			local pokemonB = PokemonData.getNatDexCompatible(b.pokemonID)
-			local bstA = tonumber(pokemonA.bst) or 0
-			local bstB = tonumber(pokemonB.bst) or 0
-			return bstA > bstB or (bstA == bstB and a.level > b.level)
-		end)
+		table.sort(
+			trainerData.party,
+			function(a, b)
+				local pokemonA = PokemonData.getNatDexCompatible(a.pokemonID)
+				local pokemonB = PokemonData.getNatDexCompatible(b.pokemonID)
+				local bstA = tonumber(pokemonA.bst) or 0
+				local bstB = tonumber(pokemonB.bst) or 0
+				return bstA > bstB or (bstA == bstB and a.level > b.level)
+			end
+		)
 		return trainerData
 	end
 
@@ -766,28 +852,31 @@ function GachaMonData.createPokemonDataFromDefeatedTrainers()
 	end
 
 	-- Build the Pokemon object from all the trainer data
-	local pokemonData = Program.DefaultPokemon:new({
-		pokemonID = trainerPokemon.pokemonID,
-		personality = trainerData.trainerId, -- I don't think these pokemon have personality values that make sense anyway?
-		nature = math.random(0, 4) * 6, -- TODO: for now, pick a random neutral nature; don't know how to retreive
-		level = trainerPokemon.level,
-		abilityNum = 0, -- trainers always use the 1st ability in ironmon
-		gender = -1, -- TODO: don't know how to retreive this accurately for a trainer
-		stats = {
-			hp = _estimateStat("hp"),
-			atk = _estimateStat("atk"),
-			def = _estimateStat("def"),
-			spa = _estimateStat("spa"),
-			spd = _estimateStat("spd"),
-			spe = _estimateStat("spe"),
-		},
-		moves = {
-			{ id = trainerPokemon.moves[1] or 0 },
-			{ id = trainerPokemon.moves[2] or 0 },
-			{ id = trainerPokemon.moves[3] or 0 },
-			{ id = trainerPokemon.moves[4] or 0 },
-		},
-	})
+	local pokemonData =
+		Program.DefaultPokemon:new(
+		{
+			pokemonID = trainerPokemon.pokemonID,
+			personality = trainerData.trainerId, -- I don't think these pokemon have personality values that make sense anyway?
+			nature = math.random(0, 4) * 6, -- TODO: for now, pick a random neutral nature; don't know how to retreive
+			level = trainerPokemon.level,
+			abilityNum = 0, -- trainers always use the 1st ability in ironmon
+			gender = -1, -- TODO: don't know how to retreive this accurately for a trainer
+			stats = {
+				hp = _estimateStat("hp"),
+				atk = _estimateStat("atk"),
+				def = _estimateStat("def"),
+				spa = _estimateStat("spa"),
+				spd = _estimateStat("spd"),
+				spe = _estimateStat("spe")
+			},
+			moves = {
+				{id = trainerPokemon.moves[1] or 0},
+				{id = trainerPokemon.moves[2] or 0},
+				{id = trainerPokemon.moves[3] or 0},
+				{id = trainerPokemon.moves[4] or 0}
+			}
+		}
+	)
 
 	-- Trainer Name & Route Info
 	local trainerInternal = TrainerData.getTrainerInfo(trainerData.trainerId)
@@ -856,7 +945,7 @@ end
 ---@param gameversion string
 ---@return number
 function GachaMonData.gameVersionToNumber(gameversion)
-	local v = { ["Ruby"] = 1, ["Emerald"] = 2, ["FireRed"] = 3, ["Sapphire"] = 4, ["LeafGreen"] = 5 }
+	local v = {["Ruby"] = 1, ["Emerald"] = 2, ["FireRed"] = 3, ["Sapphire"] = 4, ["LeafGreen"] = 5}
 	return v[gameversion or false] or 0
 end
 
@@ -864,7 +953,7 @@ end
 ---@param num number
 ---@return string
 function GachaMonData.numberToGameVersion(num)
-	local v = { "Ruby", "Emerald", "FireRed", "Sapphire", "LeafGreen" }
+	local v = {"Ruby", "Emerald", "FireRed", "Sapphire", "LeafGreen"}
 	return v[num or false] or Constants.HIDDEN_INFO
 end
 
@@ -880,7 +969,8 @@ function GachaMonData.updateMainScreenViewedGachaMon()
 	end
 	local prevMon = GachaMonData.playerViewedMon
 	-- If new or different mon or different level, recalc
-	local needsRecalculating = not prevMon or (prevMon.PokemonId ~= viewedPokemon.pokemonID) or (prevMon.Level ~= viewedPokemon.level)
+	local needsRecalculating =
+		not prevMon or (prevMon.PokemonId ~= viewedPokemon.pokemonID) or (prevMon.Level ~= viewedPokemon.level)
 	-- Otherwise, check if it learned any new moves
 	if not needsRecalculating then
 		local prevMoveIds = prevMon and prevMon:getMoveIds() or {}
@@ -906,19 +996,19 @@ end
 function GachaMonData.autoDetermineIronmonRuleset()
 	-- Ordered list for which ruleset text to check for first; e.g. check "super kaizo" before "kaizo"
 	local rulesetsOrdered = {
-		{ Key = "Standard", Name = Constants.IronmonRulesetNames.Standard },
-		{ Key = "Ultimate", Name = Constants.IronmonRulesetNames.Ultimate },
-		{ Key = "Survival", Name = Constants.IronmonRulesetNames.Survival },
-		{ Key = "SuperKaizo", Name = Constants.IronmonRulesetNames.SuperKaizo },
-		{ Key = "Subpar", Name = Constants.IronmonRulesetNames.Subpar },
+		{Key = "Standard", Name = Constants.IronmonRulesetNames.Standard},
+		{Key = "Ultimate", Name = Constants.IronmonRulesetNames.Ultimate},
+		{Key = "Survival", Name = Constants.IronmonRulesetNames.Survival},
+		{Key = "SuperKaizo", Name = Constants.IronmonRulesetNames.SuperKaizo},
+		{Key = "Subpar", Name = Constants.IronmonRulesetNames.Subpar}
 	}
 	if CustomCode.RomHacks.isPlayingNatDex() then
-		table.insert(rulesetsOrdered, { Key = "Ascension1", Name = Constants.IronmonRulesetNames.Ascension1 })
-		table.insert(rulesetsOrdered, { Key = "Ascension2", Name = Constants.IronmonRulesetNames.Ascension2 })
-		table.insert(rulesetsOrdered, { Key = "Ascension3", Name = Constants.IronmonRulesetNames.Ascension3 })
+		table.insert(rulesetsOrdered, {Key = "Ascension1", Name = Constants.IronmonRulesetNames.Ascension1})
+		table.insert(rulesetsOrdered, {Key = "Ascension2", Name = Constants.IronmonRulesetNames.Ascension2})
+		table.insert(rulesetsOrdered, {Key = "Ascension3", Name = Constants.IronmonRulesetNames.Ascension3})
 	end
 	-- Check generic "Kaizo" ruleset last
-	table.insert(rulesetsOrdered, { Key = "Kaizo", Name = Constants.IronmonRulesetNames.Kaizo })
+	table.insert(rulesetsOrdered, {Key = "Kaizo", Name = Constants.IronmonRulesetNames.Kaizo})
 
 	-- Remove all spaces and underscores for simplified comparisons
 	local _removeSpacesUnderscores = function(str)
@@ -1001,7 +1091,7 @@ end
 ---Only once the Tracker notes are loaded, check for recent GachaMon saved for this exact rom file (rom hash match)
 ---@param forceImportAndUse? boolean Optional, if true will import any found RecentMons from file regardless of ROM hash mismatch; default: false
 function GachaMonData.tryImportMatchingRomRecentMons(forceImportAndUse)
-	if GachaMonData.initialRecentMonsLoaded or not GachaMonData.isCompatibleWithEmulator()then
+	if GachaMonData.initialRecentMonsLoaded or not GachaMonData.isCompatibleWithEmulator() then
 		return
 	end
 
@@ -1164,20 +1254,34 @@ function GachaMonData.openGachaMonRemovalConfirmation(gachamon, index)
 	form.Controls.labelWarning = form:createLabel("ARE YOU SURE?", 160, 100)
 	ExternalUI.BizForms.setProperty(form.Controls.labelWarning, ExternalUI.BizForms.Properties.FORE_COLOR, "red")
 
-	form:createButton("Yes, Delete Forever!", 70, 125, function()
-		table.remove(GachaMonData.Collection, index)
-		GachaMonData.collectionRequiresSaving = true
-		if Program.currentOverlay == GachaMonOverlay and GachaMonOverlay.currentTab == GachaMonOverlay.Tabs.View then
-			GachaMonOverlay.currentTab = GachaMonOverlay.Tabs.Collection
-			GachaMonOverlay.buildCollectionData()
-			GachaMonOverlay.refreshButtons()
-			Program.redraw(true)
-		end
-		form:destroy()
-	end, 150, 25)
-	form:createButton(Resources.AllScreens.Cancel, 260, 125, function()
-		form:destroy()
-	end, 90, 25)
+	form:createButton(
+		"Yes, Delete Forever!",
+		70,
+		125,
+		function()
+			table.remove(GachaMonData.Collection, index)
+			GachaMonData.collectionRequiresSaving = true
+			if Program.currentOverlay == GachaMonOverlay and GachaMonOverlay.currentTab == GachaMonOverlay.Tabs.View then
+				GachaMonOverlay.currentTab = GachaMonOverlay.Tabs.Collection
+				GachaMonOverlay.buildCollectionData()
+				GachaMonOverlay.refreshButtons()
+				Program.redraw(true)
+			end
+			form:destroy()
+		end,
+		150,
+		25
+	)
+	form:createButton(
+		Resources.AllScreens.Cancel,
+		260,
+		125,
+		function()
+			form:destroy()
+		end,
+		90,
+		25
+	)
 end
 
 ---In some cases, the player's collection might contain Pokémon from a Nat. Dex. game,
@@ -1234,7 +1338,6 @@ function GachaMonData.checkForNatDexRequirement()
 	-- end
 end
 
-
 ---@class IGachaMon
 GachaMonData.IGachaMon = {
 	-- Total size in bytes (including version prefix): 28
@@ -1277,10 +1380,8 @@ GachaMonData.IGachaMon = {
 	C_ShinyGenderNature = 0,
 	-- 2 Bytes (16 bits); year stored as -2000 actual value (7 bits), month (4 bits), day (5 bits) as: YYYYYYYM MMMDDDDD
 	C_DateObtained = 0,
-
 	-- Any other data for easy access, but won't be stored in the collection file
 	Temp = {}, ---@type table<string, any>
-
 	-- Helper functions for converting data to proper formats, binary or otherwise
 
 	---Builds the display data needed to show off a GachaMon collectable card
@@ -1322,43 +1423,46 @@ GachaMonData.IGachaMon = {
 		C.FrameColors[2] = Constants.MoveTypeColors[type2 or false] or C.FrameColors[1]
 		return C
 	end,
-
 	-- 00DDDDDD DDDDAAAA AAAAAAHH HHHHHHHH
 	compressStatsHpAtkDef = function(self, ignoreCache)
 		if (ignoreCache or self.C_StatsHpAtkDef == 0) and type(self.Temp.Stats) == "table" then
-			self.C_StatsHpAtkDef = (self.Temp.Stats.hp or 0) -- 10 bits
-				+ Utils.bit_lshift((self.Temp.Stats.atk or 0), 10) -- 10 bits
-				+ Utils.bit_lshift((self.Temp.Stats.def or 0), 20) -- 10 bits
+			self.C_StatsHpAtkDef =
+				(self.Temp.Stats.hp or 0) + -- 10 bits
+				Utils.bit_lshift((self.Temp.Stats.atk or 0), 10) + -- 10 bits
+				Utils.bit_lshift((self.Temp.Stats.def or 0), 20) -- 10 bits
 		end
 		return self.C_StatsHpAtkDef
 	end,
 	-- 00SSSSSS SSSSDDDD DDDDDDAA AAAAAAAA
 	compressStatsSpaSpdSpe = function(self, ignoreCache)
 		if (ignoreCache or self.C_StatsSpaSpdSpe == 0) and type(self.Temp.Stats) == "table" then
-			self.C_StatsSpaSpdSpe = (self.Temp.Stats.spa or 0) -- 10 bits
-				+ Utils.bit_lshift((self.Temp.Stats.spd or 0), 10) -- 10 bits
-				+ Utils.bit_lshift((self.Temp.Stats.spe or 0), 20) -- 10 bits
+			self.C_StatsSpaSpdSpe =
+				(self.Temp.Stats.spa or 0) + -- 10 bits
+				Utils.bit_lshift((self.Temp.Stats.spd or 0), 10) + -- 10 bits
+				Utils.bit_lshift((self.Temp.Stats.spe or 0), 20) -- 10 bits
 		end
 		return self.C_StatsSpaSpdSpe
 	end,
 	-- KVVVMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 	compressMoveIdsGameVersionKeep = function(self, ignoreCache)
 		if (ignoreCache or self.C_MoveIdsGameVersionKeep == 0) and type(self.Temp.MoveIds) == "table" then
-			self.C_MoveIdsGameVersionKeep = (self.Temp.MoveIds[1] or 0) -- 9 bits
-				+ Utils.bit_lshift((self.Temp.MoveIds[2] or 0), 9) -- 9 bits
-				+ Utils.bit_lshift((self.Temp.MoveIds[3] or 0), 18) -- 9 bits
-				+ Utils.bit_lshift((self.Temp.MoveIds[4] or 0), 27) -- 9 bits
-				+ Utils.bit_lshift((self.Temp.GameVersion or 0), 36) -- 3 bits
-				+ Utils.bit_lshift((self.Temp.Keep or 0), 39) -- 1 bit
+			self.C_MoveIdsGameVersionKeep =
+				(self.Temp.MoveIds[1] or 0) + -- 9 bits
+				Utils.bit_lshift((self.Temp.MoveIds[2] or 0), 9) + -- 9 bits
+				Utils.bit_lshift((self.Temp.MoveIds[3] or 0), 18) + -- 9 bits
+				Utils.bit_lshift((self.Temp.MoveIds[4] or 0), 27) + -- 9 bits
+				Utils.bit_lshift((self.Temp.GameVersion or 0), 36) + -- 3 bits
+				Utils.bit_lshift((self.Temp.Keep or 0), 39) -- 1 bit
 		end
 		return self.C_MoveIdsGameVersionKeep
 	end,
 	-- NNNNNGGS
 	compressShinyGenderNature = function(self, ignoreCache)
 		if ignoreCache or self.C_ShinyGenderNature == 0 then
-			self.C_ShinyGenderNature = (self.Temp.IsShiny or 0) -- 1 bit
-				+ Utils.bit_lshift((self.Temp.Gender or 0), 1) -- 2 bits
-				+ Utils.bit_lshift((self.Temp.Nature or 0), 3) -- 5 bits
+			self.C_ShinyGenderNature =
+				(self.Temp.IsShiny or 0) + -- 1 bit
+				Utils.bit_lshift((self.Temp.Gender or 0), 1) + -- 2 bits
+				Utils.bit_lshift((self.Temp.Nature or 0), 3) -- 5 bits
 		end
 		return self.C_ShinyGenderNature
 	end,
@@ -1368,13 +1472,13 @@ GachaMonData.IGachaMon = {
 			local dt = os.date("*t", self.Temp.DateTimeObtained or os.time())
 			-- save space by assuming after year 2000
 			local year = math.max(dt.year - 2000, 0)
-			self.C_DateObtained = dt.day -- 5 bits
-				+ Utils.bit_lshift(dt.month, 5) -- 4 bits
-				+ Utils.bit_lshift(year, 9) -- 7 bits
+			self.C_DateObtained =
+				dt.day + -- 5 bits
+				Utils.bit_lshift(dt.month, 5) + -- 4 bits
+				Utils.bit_lshift(year, 9) -- 7 bits
 		end
 		return self.C_DateObtained
 	end,
-
 	---Use `GachaMonData.updateGachaMonAndSave()` to properly make saved changes to GachaMons
 	---@param favoriteBit number
 	---@return boolean dataChanged
@@ -1408,7 +1512,6 @@ GachaMonData.IGachaMon = {
 		end
 		return dataChanged
 	end,
-
 	---@return string
 	getName = function(self)
 		local pokemonInternal = PokemonData.getNatDexCompatible(self.PokemonId)
@@ -1423,7 +1526,7 @@ GachaMonData.IGachaMon = {
 				def = Utils.getbits(self.C_StatsHpAtkDef, 20, 10),
 				spa = Utils.getbits(self.C_StatsSpaSpdSpe, 0, 10),
 				spd = Utils.getbits(self.C_StatsSpaSpdSpe, 10, 10),
-				spe = Utils.getbits(self.C_StatsSpaSpdSpe, 20, 10),
+				spe = Utils.getbits(self.C_StatsSpaSpdSpe, 20, 10)
 			}
 		end
 		return self.Temp.Stats
@@ -1462,7 +1565,7 @@ GachaMonData.IGachaMon = {
 				Utils.getbits(self.C_MoveIdsGameVersionKeep, 0, 9),
 				Utils.getbits(self.C_MoveIdsGameVersionKeep, 9, 9),
 				Utils.getbits(self.C_MoveIdsGameVersionKeep, 18, 9),
-				Utils.getbits(self.C_MoveIdsGameVersionKeep, 27, 9),
+				Utils.getbits(self.C_MoveIdsGameVersionKeep, 27, 9)
 			}
 		end
 		return self.Temp.MoveIds
@@ -1493,7 +1596,7 @@ GachaMonData.IGachaMon = {
 		return {
 			day = Utils.getbits(self.C_DateObtained, 0, 5),
 			month = Utils.getbits(self.C_DateObtained, 5, 4),
-			year = 2000 + Utils.getbits(self.C_DateObtained, 9, 7),
+			year = 2000 + Utils.getbits(self.C_DateObtained, 9, 7)
 		}
 	end,
 	---If this GachaMon card was received as a prize card from a trainer, it should have an associated trainer ID as part of its personality value
@@ -1521,12 +1624,15 @@ GachaMonData.IGachaMon = {
 			return nil
 		end
 		-- Some names are multiple words, use those instead of just their first name
-		if Utils.containsText(commonName, "Surge") or (Utils.containsText(commonName, "Tate") and Utils.containsText(commonName, "Liza")) then
+		if
+			Utils.containsText(commonName, "Surge") or
+				(Utils.containsText(commonName, "Tate") and Utils.containsText(commonName, "Liza"))
+		 then
 			return commonName
 		else
 			return (commonName:match("(%w+).*"))
 		end
-	end,
+	end
 }
 ---Creates and returns a new IGachaMon object
 ---@param o? table Optional initial object table
